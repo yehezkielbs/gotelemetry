@@ -1,24 +1,26 @@
 package gotelemetry
 
-type Batch map[string]Flow
+type Batch map[string]*Flow
 
-func (b *Batch) Flow(name string) (*Flow, bool) {
-	return b[name]
+func (b Batch) Flow(name string) (*Flow, bool) {
+	r, ok := b[name]
+
+	return r, ok
 }
 
-func (b *Batch) SetFlow(f *Flow) {
-	b[f.Name] = f
+func (b Batch) SetFlow(f *Flow) {
+	b[f.Tag] = f
 }
 
-func (b *Batch) DeleteFlow(name string) {
+func (b Batch) DeleteFlow(name string) {
 	delete(b, name)
 }
 
-func (b *Batch) Publish(credentials Credentials) error {
+func (b Batch) Publish(credentials Credentials) error {
 	r, err := buildRequest(
-		"PUT",
+		"POST",
 		credentials,
-		"/flows/"+f.Tag+"/data",
+		"/data",
 		map[string]interface{}{
 			"values": b,
 		},

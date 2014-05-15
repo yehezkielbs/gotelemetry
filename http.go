@@ -45,10 +45,6 @@ func buildRequest(method string, credentials Credentials, fragment string, body 
 }
 
 func readJSONResponseBody(r *http.Response, target interface{}) error {
-	if r.Body != nil {
-		defer r.Body.Close()
-	}
-
 	if err := json.NewDecoder(r.Body).Decode(target); err != nil && err != io.EOF {
 		return NewError(400, "Invalid JSON response.")
 	}
@@ -63,16 +59,24 @@ func sendJSONRequest(request *http.Request, returnValue interface{}) error {
 		return err
 	}
 
-	if returnValue != nil {
-		err = readJSONResponseBody(r, returnValue)
+	if r.Body != nil {
+		defer r.Body.Close()
 	}
+
+	var body interface{}
+
+	err = readJSONResponseBody(r, &body)
 
 	if err != nil {
 		return err
 	}
 
 	if r.StatusCode != 200 {
-		return NewErrorWithData(r.StatusCode, r.Status, returnValue)
+		return NewErrorWithData(r.StatusCode, r.Status, body)
+	}
+
+	if returnValue != nil {
+		returnValue = body
 	}
 
 	return nil
