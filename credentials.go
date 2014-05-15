@@ -4,8 +4,13 @@ import (
 	"net/url"
 )
 
+// Struct Credentials incorporates the information required to call the Telemetry
+// service. Normally, you will only need to provide an API token, but you can
+// also provide a custom server URL if so required
 type Credentials struct {
-	APIKey    string
+	APIKey string
+
+	// The URL should be in the format "http(s)://host/"
 	ServerURL *url.URL
 }
 

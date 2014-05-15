@@ -1,14 +1,48 @@
+// Package gotelemetry provides bindings for the Telemetry visualization service (http://telemetryapp.com).
+//
+// In order to use the package, you will need to sign up for an account and obtain your API token from
+// https://www.telemetryapp.com/user/documentation/authentication. A full set of documents that explain
+// how the Telemetry REST API works is also available at https://www.telemetryapp.com/user/documentation/.
+//
+// The package supports submitting flow data either individually or in batches to minimize network use.
+// Please bear in mind that both the Flow and Batch submission mechanisms are not, by default,
+// thread-safe; if thread-safety is desired, it must be provided by the caller.
 package gotelemetry
 
 import (
 	"reflect"
 )
 
+// Struct Flow identifies a flow, defined as the combination of a tag and
+// the data associated with it, which must be a pointer to one of the structs declared
+// in variants.go
+//
+// Note that Flow structs are not thread-safe by default, because they store a pointer to
+// the underlying variant information. If you require thread-safety, you must mediate access
+// to the flow through a synchronization mechanism of some kind, like a mutex.
+//
+// Flows are designed to be instantiated once and then modified as needed; you can grab
+// a pointer to the appropriate underlying data by calling one of the *Data() methods
+// of the struct.
 type Flow struct {
 	Tag  string
 	Data interface{}
 }
 
+// NewFlow() creates a new flow. Note that the `data` parameter *must* be a pointer to
+// one of the variant structs defined in variant.go. If anything other than a pointer
+// is passed, the function panics to prevent the creation of a silently immutable flow.
+//
+// If the flow is being submitted individually, the tag can be one of:
+//
+// ** The flow's named tag as entered in the Telemetry admin interface (e.g.: `gauge_1`)
+//
+// ** The flow's unique ID
+//
+// ** The flow's embed ID
+//
+// If, on the other hand, the flow is being submitted as part of a batch, only named
+// tags are supported.
 func NewFlow(tag string, data interface{}) *Flow {
 	if reflect.TypeOf(data).Kind() != reflect.Ptr {
 		panic("NewFlow() expects a pointer to a variant struct")
@@ -17,6 +51,9 @@ func NewFlow(tag string, data interface{}) *Flow {
 	return &Flow{tag, data}
 }
 
+// Publish() sends a flow to the Telemetry API servers. On output, the function return
+// nil if the submission was successful, an instance of gotelemetry.Error if a REST
+// error occurred, or a errors.Error instance otherwise.
 func (f *Flow) Publish(credentials Credentials) error {
 	r, err := buildRequest(
 		"PUT",

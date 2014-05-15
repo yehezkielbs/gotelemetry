@@ -5,8 +5,39 @@ import (
 	"testing"
 )
 
-func TestFlows(t *testing.T) {
+func Example_flow() {
+	c := NewCredentials("test-api-token")
 
+	g := Gauge{
+		Value: 123,
+	}
+
+	f := NewFlow("test_gauge", &g)
+
+	err := f.Publish(c)
+
+	if err != nil {
+		panic("Something went wrong…", err.Error)
+	}
+}
+
+func ExampleFlow() {
+	c := NewCredentials("test-api-token")
+
+	g := Gauge{
+		Value: 123,
+	}
+
+	f := NewFlow("test_gauge", &g)
+
+	err := f.Publish(c)
+
+	if err != nil {
+		panic("Something went wrong…", err.Error)
+	}
+}
+
+func TestFlows(t *testing.T) {
 	Convey("Flow objects", t, func() {
 
 		Convey("Should support instantiation", func() {
@@ -83,7 +114,5 @@ func TestFlows(t *testing.T) {
 
 			So(f, ShouldPanic)
 		})
-
 	})
-
 }
