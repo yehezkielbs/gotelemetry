@@ -5,9 +5,9 @@ gotelemetry
 
 ## Installing
 
-    go get github.com/telemetry/gotelemetry
+    go get github.com/telemetryapp/gotelemetry
 
-    import "github.com/telemetry/gotelemetry"
+    import "github.com/telemetryapp/gotelemetry"
 
 ## Usage
 
