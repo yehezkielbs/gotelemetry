@@ -1,12 +1,13 @@
 package gotelemetry
 
 import (
+	"fmt"
 	. "github.com/smartystreets/goconvey/convey"
 	"testing"
 )
 
 func Example_flow() {
-	c := NewCredentials("test-api-token")
+	c, _ := NewCredentials("test-api-token")
 
 	g := Gauge{
 		Value: 123,
@@ -17,12 +18,12 @@ func Example_flow() {
 	err := f.Publish(c)
 
 	if err != nil {
-		panic("Something went wrong…", err.Error)
+		panic(fmt.Sprintf("Something went wrong: %v\n", err))
 	}
 }
 
 func ExampleFlow() {
-	c := NewCredentials("test-api-token")
+	c, _ := NewCredentials("test-api-token")
 
 	g := Gauge{
 		Value: 123,
@@ -33,7 +34,7 @@ func ExampleFlow() {
 	err := f.Publish(c)
 
 	if err != nil {
-		panic("Something went wrong…", err.Error)
+		panic(fmt.Sprintf("Something went wrong: %v\n", err))
 	}
 }
 

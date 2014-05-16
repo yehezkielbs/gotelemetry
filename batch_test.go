@@ -1,6 +1,7 @@
 package gotelemetry
 
 import (
+	"fmt"
 	. "github.com/smartystreets/goconvey/convey"
 	"testing"
 )
@@ -26,7 +27,7 @@ func Example_batch() {
 	err = b.Publish(c)
 
 	if err != nil {
-		panic("Something went wrong…", err.Error())
+		panic(fmt.Sprintf("Something went wrong: %v\n", err))
 	}
 }
 
@@ -51,7 +52,7 @@ func ExampleBatch() {
 	err = b.Publish(c)
 
 	if err != nil {
-		panic("Something went wrong…", err.Error())
+		panic(fmt.Sprintf("Something went wrong: %v\n", err))
 	}
 }
 
