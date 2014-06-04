@@ -293,7 +293,7 @@ type Timeseries struct {
 	Interval       string                     `json:"interval"`
 	IntervalCount  int                        `json:"interval_count"`
 	SeriesMetadata []TimeseriesSeriesMetadata `json:"series_metadata"`
-	NewValues      []float64                  `json:"values"`
+	Values         []float64                  `json:"values"`
 }
 
 type Upstatus struct {
