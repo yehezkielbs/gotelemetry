@@ -277,19 +277,23 @@ type Timeline struct {
 	Messages  []TimelineMessage `json:"messages"`
 }
 
+type TimeseriesSeriesMetadata struct {
+	Aggregation string `json:"aggregation"`
+	Label       string `json:"label,omitempty"`
+	Color       string `json:"color,omitempty"`
+	ValueType   string `json:"value_type,omitempty"`
+	Interpolate bool   `json:"interpolate,omitempty"`
+}
+
 type Timeseries struct {
-	ExpiresAt     int64     `json:"expires_at,omitempty"`
-	Title         string    `json:"title,omitempty"`
-	Priority      int       `json:"priority,omitempty"`
-	Aggregation   string    `json:"aggregation"`
-	Color         string    `json:"color,omitempty"`
-	Interval      string    `json:"interval"`
-	IntervalCount int       `json:"interval_count,omitempty"`
-	Label         string    `json:"label,omitempty"`
-	Renderer      string    `json:"renderer,omitempty"`
-	Value         float64   `json:"value,omitempty"`
-	ValueType     string    `json:"value_type,omitempty"`
-	Values        []float64 `json:"values,omitempty"`
+	ExpiresAt      int64                      `json:"expires_at,omitempty"`
+	Title          string                     `json:"title,omitempty"`
+	Renderer       string                     `json:"renderer,omitempty"`
+	Baseline       string                     `json:"baseline,omitempty"`
+	Interval       string                     `json:"interval"`
+	IntervalCount  int                        `json:"interval_count"`
+	SeriesMetadata []TimeseriesSeriesMetadata `json:"series_metadata"`
+	NewValues      []float64                  `json:"values"`
 }
 
 type Upstatus struct {
