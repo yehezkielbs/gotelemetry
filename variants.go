@@ -174,10 +174,12 @@ type Multigauge struct {
 }
 
 type MultivalueValue struct {
-	Label     string  `json:"label"`
-	Value     float64 `json:"value"`
-	Color     string  `json:"color,omitempty"`
-	ValueType string  `json:"value_type,omitempty"`
+	Label      string  `json:"label"`
+	Value      float64 `json:"value"`
+	Color      string  `json:"color,omitempty"`
+	ValueType  string  `json:"value_type,omitempty"`
+	Abbreviate bool    `json:"abbreviate,omitempty"`
+	Rounding   int     `json:"rounding,omitempty"`
 }
 
 type Multivalue struct {
@@ -307,16 +309,18 @@ type Upstatus struct {
 }
 
 type Value struct {
-	ExpiresAt int64     `json:"expires_at,omitempty"`
-	Title     string    `json:"title,omitempty"`
-	Priority  int       `json:"priority,omitempty"`
-	Color     string    `json:"color,omitempty"`
-	Delta     float64   `json:"delta,omitempty"`
-	DeltaType string    `json:"delta_type,omitempty"`
-	Label     string    `json:"label,omitempty"`
-	Sparkline []float64 `json:"sparkline,omitempty"`
-	Value     float64   `json:"priority"`
-	ValueType string    `json:"value_type,omitempty"`
+	ExpiresAt  int64     `json:"expires_at,omitempty"`
+	Title      string    `json:"title,omitempty"`
+	Priority   int       `json:"priority,omitempty"`
+	Color      string    `json:"color,omitempty"`
+	Delta      float64   `json:"delta,omitempty"`
+	DeltaType  string    `json:"delta_type,omitempty"`
+	Label      string    `json:"label,omitempty"`
+	Sparkline  []float64 `json:"sparkline,omitempty"`
+	Value      float64   `json:"priority"`
+	ValueType  string    `json:"value_type,omitempty"`
+	Abbreviate bool      `json:"abbreviate,omitempty"`
+	Rounding   int       `json:"rounding,omitempty"`
 }
 
 type WaterfallData struct {
