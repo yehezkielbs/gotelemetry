@@ -104,10 +104,10 @@ type GridData struct {
 }
 
 type Grid struct {
-	ExpiresAt int64      `json:"expires_at,omitempty"`
-	Title     string     `json:"title,omitempty"`
-	Priority  int        `json:"priority,omitempty"`
-	Data      []GridData `json:"data"`
+	ExpiresAt int64        `json:"expires_at,omitempty"`
+	Title     string       `json:"title,omitempty"`
+	Priority  int          `json:"priority,omitempty"`
+	Data      [][]GridData `json:"data"`
 }
 
 type Histogram struct {
@@ -243,11 +243,11 @@ type TableCell struct {
 }
 
 type Table struct {
-	ExpiresAt int64       `json:"expires_at,omitempty"`
-	Title     string      `json:"title,omitempty"`
-	Priority  int         `json:"priority,omitempty"`
-	Cells     []TableCell `json:"cells"`
-	Headers   []string    `json:"headers"`
+	ExpiresAt int64         `json:"expires_at,omitempty"`
+	Title     string        `json:"title,omitempty"`
+	Priority  int           `json:"priority,omitempty"`
+	Cells     [][]TableCell `json:"cells"`
+	Headers   []string      `json:"headers"`
 }
 
 type Text struct {
