@@ -246,8 +246,8 @@ type Table struct {
 	ExpiresAt int64         `json:"expires_at,omitempty"`
 	Title     string        `json:"title,omitempty"`
 	Priority  int           `json:"priority,omitempty"`
+	Headers   []string      `json:"headers,omitempty"`
 	Cells     [][]TableCell `json:"cells"`
-	Headers   []string      `json:"headers"`
 }
 
 type Text struct {
