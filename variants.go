@@ -69,6 +69,7 @@ type Gauge struct {
 	Value2Label string  `json:"value_2_label,omitempty"`
 	ValueColor  string  `json:"value_2_label,omitempty"`
 	ValueType   string  `json:"value_2_label,omitempty"`
+	Icon        string  `json:"icon,omitempty"`
 }
 
 type GraphSeries struct {
@@ -205,6 +206,7 @@ type MultigaugeGauge struct {
 	Value     float64 `json:"value"`
 	Max       float64 `json:"max,omitempty"`
 	ValueType string  `json:"value_type,omitempty"`
+	Icon      string  `json:"icon,omitempty"`
 }
 
 type Multigauge struct {
@@ -223,6 +225,8 @@ type MultivalueValue struct {
 	ValueType  string  `json:"value_type,omitempty"`
 	Abbreviate bool    `json:"abbreviate,omitempty"`
 	Rounding   int     `json:"rounding,omitempty"`
+	Icon       string  `json:"icon,omitempty"`
+	LabelColor string  `json:"label_color,omitempty"`
 }
 
 type Multivalue struct {
@@ -364,6 +368,8 @@ type Value struct {
 	ValueType  string    `json:"value_type,omitempty"`
 	Abbreviate bool      `json:"abbreviate,omitempty"`
 	Rounding   int       `json:"rounding,omitempty"`
+	Icon       string    `json:"icon,omitempty"`
+	LabelColor string    `json:"label_color,omitempty"`
 }
 
 type WaterfallData struct {
