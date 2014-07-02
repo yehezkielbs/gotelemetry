@@ -282,11 +282,12 @@ type Status struct {
 }
 
 type TableCell struct {
-	Value     string `json:"value"`
-	Color     string `json:"color,omitempty"`
-	Alignment string `json:"alignment,omitempty"`
-	Icon      string `json:"icon,omitempty"`
-	ValueType string `json:"value_type,omitempty"`
+	Value     string    `json:"value,omitempty"`
+	Color     string    `json:"color,omitempty"`
+	Alignment string    `json:"alignment,omitempty"`
+	Icon      string    `json:"icon,omitempty"`
+	ValueType string    `json:"value_type,omitempty"`
+	Sparkline []float64 `json:"sparkline,omitempty"`
 }
 
 type Table struct {
