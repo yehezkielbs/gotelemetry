@@ -152,53 +152,58 @@ type Log struct {
 	Messages  []LogMessage `json:"messages"`
 }
 
-type MapCircle struct {
-	Center      []float64 `json:"center"`
-	FillColor   string    `json:"fill_color,omitempty"`
-	Label       string    `json:"label"`
-	LineWidth   int       `json:"line_width"`
-	Radius      int       `json:"radius"`
-	StrokeColor string    `json:"stroke_color"`
+type MapCoord struct {
+	Lat float64 `json:"lat"`
+	Lon float64 `json:"lon"`
 }
 
-type MapCoordinate struct {
+type MapCoordWithZoom struct {
 	Lat  float64 `json:"lat"`
 	Lon  float64 `json:"lon"`
 	Zoom int     `json:"zoom"`
 }
 
+type MapCircle struct {
+	Center      MapCoord `json:"center"`
+	FillColor   string   `json:"fill_color,omitempty"`
+	Label       string   `json:"label"`
+	LineWidth   int      `json:"line_width"`
+	Radius      int      `json:"radius"`
+	StrokeColor string   `json:"stroke_color"`
+}
+
 type MapMarker struct {
-	Color  string    `json:"color"`
-	Coords []float64 `json:"coords"`
-	Icon   string    `json:"icon"`
-	Label  string    `json:"label"`
+	Color  string   `json:"color"`
+	Coords MapCoord `json:"coords"`
+	Icon   string   `json:"icon"`
+	Label  string   `json:"label"`
 }
 
 type MapPolygon struct {
-	FillColor   string      `json:"fill_color"`
-	Label       string      `json:"label"`
-	LineWidth   int         `json:"line_width"`
-	StrokeColor string      `json:"stroke_color"`
-	Vertices    [][]float64 `json:"vertices"`
+	FillColor   string     `json:"fill_color"`
+	Label       string     `json:"label"`
+	LineWidth   int        `json:"line_width"`
+	StrokeColor string     `json:"stroke_color"`
+	Vertices    []MapCoord `json:"vertices"`
 }
 
 type MapPolyline struct {
-	Label       string      `json:"label"`
-	LineWidth   int         `json:"line_width"`
-	StrokeColor string      `json:"stroke_color"`
-	Vertices    [][]float64 `json:"vertices"`
+	Label       string     `json:"label"`
+	LineWidth   int        `json:"line_width"`
+	StrokeColor string     `json:"stroke_color"`
+	Vertices    []MapCoord `json:"vertices"`
 }
 
 type Map struct {
-	ExpiresAt   int64         `json:"expires_at,omitempty"`
-	Title       string        `json:"title,omitempty"`
-	Circles     []MapCircle   `json:"circles,omitempty"`
-	Coordinates MapCoordinate `json:"coordinates"`
-	MapboxId    string        `json:"mapbox_id,omitempty"`
-	Markers     []MapMarker   `json:"markers,omitempty"`
-	Polygons    []MapPolygon  `json:"polygons,omitempty"`
-	Polylines   []MapPolyline `json:"polylines,omitempty"`
-	Type        string        `json:"type,omitempty"`
+	ExpiresAt int64            `json:"expires_at,omitempty"`
+	Title     string           `json:"title,omitempty"`
+	Circles   []MapCircle      `json:"circles,omitempty"`
+	Coords    MapCoordWithZoom `json:"coords"`
+	MapboxId  string           `json:"mapbox_id,omitempty"`
+	Markers   []MapMarker      `json:"markers,omitempty"`
+	Polygons  []MapPolygon     `json:"polygons,omitempty"`
+	Polylines []MapPolyline    `json:"polylines,omitempty"`
+	Type      string           `json:"type,omitempty"`
 }
 
 type MultigaugeGauge struct {
