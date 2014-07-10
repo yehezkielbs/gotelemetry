@@ -8,6 +8,7 @@ type BarchartBar struct {
 
 type Barchart struct {
 	ExpiresAt int64         `json:"expires_at,omitempty"`
+	Opacity   float64       `json:"opacity,omitempty"`
 	Title     string        `json:"title,omitempty"`
 	Priority  int           `json:"priority,omitempty"`
 	Bars      []BarchartBar `json:"bars"`
@@ -25,22 +26,25 @@ type BulletchartChart struct {
 
 type Bulletchart struct {
 	ExpiresAt    int64              `json:"expires_at,omitempty"`
+	Opacity      float64            `json:"opacity,omitempty"`
 	Title        string             `json:"title,omitempty"`
 	Bulletcharts []BulletchartChart `json:"bulletcharts"`
 }
 
 type Countdown struct {
-	ExpiresAt int64  `json:"expires_at,omitempty"`
-	Title     string `json:"title,omitempty"`
-	Priority  int    `json:"priority,omitempty"`
-	Message   string `json:"message"`
-	Time      int64  `json:"time"`
+	ExpiresAt int64   `json:"expires_at,omitempty"`
+	Opacity   float64 `json:"opacity,omitempty"`
+	Title     string  `json:"title,omitempty"`
+	Priority  int     `json:"priority,omitempty"`
+	Message   string  `json:"message"`
+	Time      int64   `json:"time"`
 }
 
 type Custom struct {
-	ExpiresAt int64  `json:"expires_at,omitempty"`
-	Title     string `json:"title,omitempty"`
-	Priority  int    `json:"priority,omitempty"`
+	ExpiresAt int64   `json:"expires_at,omitempty"`
+	Opacity   float64 `json:"opacity,omitempty"`
+	Title     string  `json:"title,omitempty"`
+	Priority  int     `json:"priority,omitempty"`
 }
 
 type FunnelchartChart struct {
@@ -51,6 +55,7 @@ type FunnelchartChart struct {
 
 type Funnelchart struct {
 	ExpiresAt int64              `json:"expires_at,omitempty"`
+	Opacity   float64            `json:"opacity,omitempty"`
 	Title     string             `json:"title,omitempty"`
 	Priority  int                `json:"priority,omitempty"`
 	Values    []FunnelchartChart `json:"values"`
@@ -58,6 +63,7 @@ type Funnelchart struct {
 
 type Gauge struct {
 	ExpiresAt   int64   `json:"expires_at,omitempty"`
+	Opacity     float64 `json:"opacity,omitempty"`
 	Title       string  `json:"title,omitempty"`
 	Priority    int     `json:"priority,omitempty"`
 	Value       float64 `json:"value"`
@@ -80,6 +86,7 @@ type GraphSeries struct {
 
 type Graph struct {
 	ExpiresAt int64         `json:"expires_at,omitempty"`
+	Opacity   float64       `json:"opacity,omitempty"`
 	Title     string        `json:"title,omitempty"`
 	Priority  int           `json:"priority,omitempty"`
 	Series    []GraphSeries `json:"series"`
@@ -106,15 +113,17 @@ type GridData struct {
 
 type Grid struct {
 	ExpiresAt int64        `json:"expires_at,omitempty"`
+	Opacity   float64      `json:"opacity,omitempty"`
 	Title     string       `json:"title,omitempty"`
 	Priority  int          `json:"priority,omitempty"`
 	Data      [][]GridData `json:"data"`
 }
 
 type Histogram struct {
-	ExpiresAt int64  `json:"expires_at,omitempty"`
-	Title     string `json:"title,omitempty"`
-	Priority  int    `json:"priority,omitempty"`
+	ExpiresAt int64   `json:"expires_at,omitempty"`
+	Opacity   float64 `json:"opacity,omitempty"`
+	Title     string  `json:"title,omitempty"`
+	Priority  int     `json:"priority,omitempty"`
 }
 
 type IconIcon struct {
@@ -125,18 +134,20 @@ type IconIcon struct {
 
 type Icon struct {
 	ExpiresAt int64      `json:"expires_at,omitempty"`
+	Opacity   float64    `json:"opacity,omitempty"`
 	Title     string     `json:"title,omitempty"`
 	Priority  int        `json:"priority,omitempty"`
 	Icons     []IconIcon `json:"icons"`
 }
 
 type Image struct {
-	ExpiresAt int64  `json:"expires_at,omitempty"`
-	Title     string `json:"title,omitempty"`
-	Priority  int    `json:"priority,omitempty"`
-	Link      string `json:"link,omitempty"`
-	Mode      string `json:"mode,omitempty"`
-	URL       string `json:"url"`
+	ExpiresAt int64   `json:"expires_at,omitempty"`
+	Opacity   float64 `json:"opacity,omitempty"`
+	Title     string  `json:"title,omitempty"`
+	Priority  int     `json:"priority,omitempty"`
+	Link      string  `json:"link,omitempty"`
+	Mode      string  `json:"mode,omitempty"`
+	URL       string  `json:"url"`
 }
 
 type LogMessage struct {
@@ -147,6 +158,7 @@ type LogMessage struct {
 
 type Log struct {
 	ExpiresAt int64        `json:"expires_at,omitempty"`
+	Opacity   float64      `json:"opacity,omitempty"`
 	Title     string       `json:"title,omitempty"`
 	Priority  int          `json:"priority,omitempty"`
 	Messages  []LogMessage `json:"messages"`
@@ -196,6 +208,7 @@ type MapPolyline struct {
 
 type Map struct {
 	ExpiresAt int64            `json:"expires_at,omitempty"`
+	Opacity   float64          `json:"opacity,omitempty"`
 	Title     string           `json:"title,omitempty"`
 	Circles   []MapCircle      `json:"circles,omitempty"`
 	Coords    MapCoordWithZoom `json:"coords"`
@@ -217,6 +230,7 @@ type MultigaugeGauge struct {
 type Multigauge struct {
 	GaugeColor string            `json:"gauge_color,omitempty"`
 	ExpiresAt  int64             `json:"expires_at,omitempty"`
+	Opacity    float64           `json:"opacity,omitempty"`
 	Title      string            `json:"title,omitempty"`
 	Priority   int               `json:"priority,omitempty"`
 	Layout     string            `json:"layout"`
@@ -236,6 +250,7 @@ type MultivalueValue struct {
 
 type Multivalue struct {
 	ExpiresAt int64             `json:"expires_at,omitempty"`
+	Opacity   float64           `json:"opacity,omitempty"`
 	Title     string            `json:"title,omitempty"`
 	Priority  int               `json:"priority,omitempty"`
 	Values    []MultivalueValue `json:"values"`
@@ -243,6 +258,7 @@ type Multivalue struct {
 
 type Piechart struct {
 	ExpiresAt int64     `json:"expires_at,omitempty"`
+	Opacity   float64   `json:"opacity,omitempty"`
 	Title     string    `json:"title,omitempty"`
 	Priority  int       `json:"priority,omitempty"`
 	Colors    []string  `json:"colors,omitempty"`
@@ -253,6 +269,7 @@ type Piechart struct {
 
 type Scatterplot struct {
 	ExpiresAt int64     `json:"expires_at,omitempty"`
+	Opacity   float64   `json:"opacity,omitempty"`
 	Title     string    `json:"title,omitempty"`
 	Priority  int       `json:"priority,omitempty"`
 	Values    []float64 `json:"values"`
@@ -268,6 +285,7 @@ type Server struct {
 
 type Servers struct {
 	ExpiresAt int64   `json:"expires_at,omitempty"`
+	Opacity   float64 `json:"opacity,omitempty"`
 	Title     string  `json:"title,omitempty"`
 	Priority  int     `json:"priority,omitempty"`
 	Orange    float64 `json:"name,omitempty"`
@@ -281,6 +299,7 @@ type StatusItem struct {
 
 type Status struct {
 	ExpiresAt int64        `json:"expires_at,omitempty"`
+	Opacity   float64      `json:"opacity,omitempty"`
 	Title     string       `json:"title,omitempty"`
 	Priority  int          `json:"priority,omitempty"`
 	Statuses  []StatusItem `json:"statuses"`
@@ -297,6 +316,7 @@ type TableCell struct {
 
 type Table struct {
 	ExpiresAt int64         `json:"expires_at,omitempty"`
+	Opacity   float64       `json:"opacity,omitempty"`
 	Title     string        `json:"title,omitempty"`
 	Priority  int           `json:"priority,omitempty"`
 	Headers   []string      `json:"headers,omitempty"`
@@ -304,15 +324,17 @@ type Table struct {
 }
 
 type Text struct {
-	ExpiresAt int64  `json:"expires_at,omitempty"`
-	Title     string `json:"title,omitempty"`
-	Priority  int    `json:"priority,omitempty"`
-	Alignment string `json:"alignment,omitempty"`
-	Test      string `json:"text"`
+	ExpiresAt int64   `json:"expires_at,omitempty"`
+	Opacity   float64 `json:"opacity,omitempty"`
+	Title     string  `json:"title,omitempty"`
+	Priority  int     `json:"priority,omitempty"`
+	Alignment string  `json:"alignment,omitempty"`
+	Test      string  `json:"text"`
 }
 
 type Tickertape struct {
 	ExpiresAt int64    `json:"expires_at,omitempty"`
+	Opacity   float64  `json:"opacity,omitempty"`
 	Title     string   `json:"title,omitempty"`
 	Priority  int      `json:"priority,omitempty"`
 	Messages  []string `json:"messages"`
@@ -327,6 +349,7 @@ type TimelineMessage struct {
 
 type Timeline struct {
 	ExpiresAt int64             `json:"expires_at,omitempty"`
+	Opacity   float64           `json:"opacity,omitempty"`
 	Title     string            `json:"title,omitempty"`
 	Priority  int               `json:"priority,omitempty"`
 	Messages  []TimelineMessage `json:"messages"`
@@ -342,6 +365,7 @@ type TimeseriesSeriesMetadata struct {
 
 type Timeseries struct {
 	ExpiresAt      int64                      `json:"expires_at,omitempty"`
+	Opacity        float64                    `json:"opacity,omitempty"`
 	Title          string                     `json:"title,omitempty"`
 	Renderer       string                     `json:"renderer,omitempty"`
 	Baseline       string                     `json:"baseline,omitempty"`
@@ -353,6 +377,7 @@ type Timeseries struct {
 
 type Upstatus struct {
 	ExpiresAt int64    `json:"expires_at,omitempty"`
+	Opacity   float64  `json:"opacity,omitempty"`
 	Title     string   `json:"title,omitempty"`
 	Priority  int      `json:"priority,omitempty"`
 	Down      []string `json:"down,omitempty"`
@@ -363,6 +388,7 @@ type Upstatus struct {
 
 type Value struct {
 	ExpiresAt  int64     `json:"expires_at,omitempty"`
+	Opacity    float64   `json:"opacity,omitempty"`
 	Title      string    `json:"title,omitempty"`
 	Priority   int       `json:"priority,omitempty"`
 	Color      string    `json:"color,omitempty"`
@@ -385,6 +411,7 @@ type WaterfallData struct {
 
 type Waterfall struct {
 	ExpiresAt int64           `json:"expires_at,omitempty"`
+	Opacity   float64         `json:"opacity,omitempty"`
 	Title     string          `json:"title,omitempty"`
 	Priority  int             `json:"priority,omitempty"`
 	Color     string          `json:"color,omitempty"`
