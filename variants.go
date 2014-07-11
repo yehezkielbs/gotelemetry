@@ -329,7 +329,7 @@ type Text struct {
 	Title     string  `json:"title,omitempty"`
 	Priority  int     `json:"priority,omitempty"`
 	Alignment string  `json:"alignment,omitempty"`
-	Test      string  `json:"text"`
+	Text      string  `json:"text"`
 }
 
 type Tickertape struct {
