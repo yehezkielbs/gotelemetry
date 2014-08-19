@@ -73,8 +73,8 @@ type Gauge struct {
 	Value2      float64  `json:"value_2,omitempty"`
 	Value2Color string   `json:"value_2_color,omitempty"`
 	Value2Label string   `json:"value_2_label,omitempty"`
-	ValueColor  string   `json:"value_2_label,omitempty"`
-	ValueType   string   `json:"value_2_label,omitempty"`
+	ValueColor  string   `json:"value_2_color,omitempty"`
+	ValueType   string   `json:"value_2_type,omitempty"`
 	Icon        string   `json:"icon,omitempty"`
 }
 
