@@ -10,6 +10,7 @@
 package gotelemetry
 
 import (
+	"net/http"
 	"reflect"
 )
 
@@ -67,6 +68,29 @@ func (f *Flow) Publish(credentials Credentials) error {
 	}
 
 	return sendJSONRequest(r, nil)
+}
+
+func (f *Flow) Read(credentials Credentials) error {
+	req, err := buildRequest(
+		"GET",
+		credentials,
+		"/flows/"+f.Tag+"/data",
+		nil,
+	)
+
+	if err != nil {
+		return err
+	}
+
+	res, err := http.DefaultClient.Do(req)
+
+	if err != nil {
+		return err
+	}
+
+	err = readJSONResponseBody(res, f.Data)
+
+	return err
 }
 
 func (f *Flow) BarchartData() (*Barchart, bool) {

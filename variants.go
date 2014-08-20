@@ -67,14 +67,14 @@ type Gauge struct {
 	Title       string   `json:"title,omitempty"`
 	Priority    int      `json:"priority,omitempty"`
 	Value       float64  `json:"value"`
+	ValueColor  string   `json:"value_color,omitempty"`
+	ValueType   string   `json:"value_type,omitempty"`
 	GaugeColor  string   `json:"gauge_color,omitempty"`
 	Max         float64  `json:"max,omitempty"`
 	Range       int      `json:"range,omitempty"`
 	Value2      float64  `json:"value_2,omitempty"`
 	Value2Color string   `json:"value_2_color,omitempty"`
 	Value2Label string   `json:"value_2_label,omitempty"`
-	ValueColor  string   `json:"value_2_color,omitempty"`
-	ValueType   string   `json:"value_2_type,omitempty"`
 	Icon        string   `json:"icon,omitempty"`
 }
 
@@ -396,7 +396,7 @@ type Value struct {
 	DeltaType  string    `json:"delta_type,omitempty"`
 	Label      string    `json:"label,omitempty"`
 	Sparkline  []float64 `json:"sparkline,omitempty"`
-	Value      float64   `json:"priority"`
+	Value      float64   `json:"value,omitempty"`
 	ValueType  string    `json:"value_type,omitempty"`
 	Abbreviate bool      `json:"abbreviate,omitempty"`
 	Rounding   int       `json:"rounding,omitempty"`
