@@ -11,8 +11,8 @@ type Widget struct {
 	Background     string `json:"background"`
 }
 
-func CreateWidget(widget Widget, credentials Credentials) error {
-	request, err := buildRequest("POST", credentials, "/widgets", widget)
+func (w *Widget) CreateWidget(credentials Credentials) error {
+	request, err := buildRequest("POST", credentials, "/widgets", w)
 
 	if err != nil {
 		return err
