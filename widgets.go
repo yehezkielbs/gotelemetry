@@ -1,14 +1,14 @@
 package gotelemetry
 
 type Widget struct {
-	Variant        string
-	Board_id       string
-	Column         int
-	Row            int
-	Width          int
-	Height         int
-	In_board_index int
-	Background     string
+	Variant        string `json:"variant"`
+	Board_id       string `json:"board_id"`
+	Column         int    `json:"column"`
+	Row            int    `json:"row"`
+	Width          int    `json:"width"`
+	Height         int    `json:"height"`
+	In_board_index int    `json:"in_board_index"`
+	Background     string `json:"background"`
 }
 
 func CreateWidget(widget Widget, credentials Credentials) error {
@@ -16,7 +16,7 @@ func CreateWidget(widget Widget, credentials Credentials) error {
 
 	if err != nil {
 		return err
-	} else {
-		return sendJSONRequest(request, nil)
 	}
+	return sendJSONRequest(request, nil)
+
 }
