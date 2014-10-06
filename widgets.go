@@ -16,7 +16,7 @@ func CreateWidget(widget Widget, credentials Credentials) error {
 
 	if err != nil {
 		return err
+	} else {
+		return sendJSONRequest(request, nil)
 	}
-
-	return sendJSONRequest(request, nil)
 }
