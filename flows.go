@@ -26,8 +26,12 @@ import (
 // a pointer to the appropriate underlying data by calling one of the *Data() methods
 // of the struct.
 type Flow struct {
-	Tag  string
-	Data interface{}
+	Tag             string `json:"tag"`
+	Data            interface{}
+	Variant         string `json:"variant"`
+	Source_provider string `json:"source_provider,omitempty"`
+	Filter          string `json:"filter,omitempty"`
+	Params          string `json:"params,omitempty"`
 }
 
 // NewFlow() creates a new flow. Note that the `data` parameter *must* be a pointer to
@@ -49,7 +53,7 @@ func NewFlow(tag string, data interface{}) *Flow {
 		panic("NewFlow() expects a pointer to a variant struct")
 	}
 
-	return &Flow{tag, data}
+	return &Flow{Tag: tag, Data: data}
 }
 
 // Publish() sends a flow to the Telemetry API servers. On output, the function return
@@ -91,6 +95,16 @@ func (f *Flow) Read(credentials Credentials) error {
 	err = readJSONResponseBody(res, f.Data)
 
 	return err
+}
+
+func (f *Flow) CreateFlow(credentials Credentials) error {
+	request, err := buildRequest("POST", credentials, "/flows", f)
+
+	if err != nil {
+		return err
+	}
+	return sendJSONRequest(request, nil)
+
 }
 
 func (f *Flow) BarchartData() (*Barchart, bool) {
