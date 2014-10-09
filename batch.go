@@ -46,5 +46,7 @@ func (b Batch) Publish(credentials Credentials) error {
 		return err
 	}
 
-	return sendJSONRequest(r, nil)
+	_, err = sendJSONRequest(r)
+
+	return err
 }

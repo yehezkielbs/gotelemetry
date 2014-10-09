@@ -52,11 +52,11 @@ func readJSONResponseBody(r *http.Response, target interface{}) error {
 	return nil
 }
 
-func sendJSONRequest(request *http.Request, returnValue interface{}) error {
+func sendJSONRequest(request *http.Request) (interface{}, error) {
 	r, err := http.DefaultClient.Do(request)
 
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	if r.Body != nil {
@@ -68,16 +68,12 @@ func sendJSONRequest(request *http.Request, returnValue interface{}) error {
 	err = readJSONResponseBody(r, &body)
 
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	if r.StatusCode != 200 {
-		return NewErrorWithData(r.StatusCode, r.Status, body)
+		return nil, NewErrorWithData(r.StatusCode, r.Status, body)
 	}
 
-	if returnValue != nil {
-		returnValue = body
-	}
-
-	return nil
+	return body, nil
 }

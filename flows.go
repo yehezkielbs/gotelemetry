@@ -71,7 +71,9 @@ func (f *Flow) Publish(credentials Credentials) error {
 		return err
 	}
 
-	return sendJSONRequest(r, nil)
+	_, err = sendJSONRequest(r)
+
+	return err
 }
 
 func (f *Flow) Read(credentials Credentials) error {
@@ -103,8 +105,10 @@ func (f *Flow) CreateFlow(credentials Credentials) error {
 	if err != nil {
 		return err
 	}
-	return sendJSONRequest(request, nil)
 
+	_, err = sendJSONRequest(request)
+
+	return err
 }
 
 func (f *Flow) BarchartData() (*Barchart, bool) {
