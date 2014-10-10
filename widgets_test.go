@@ -7,7 +7,7 @@ import (
 
 // Constants
 const board_id string = "542ef7b37765627da4090000"
-const api_key string = "test-api-token"
+const api_key string = "2fcec2bd1c112dad755fbe1ad54db878"
 
 func TestWidgets(t *testing.T) {
 
