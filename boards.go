@@ -1,12 +1,18 @@
 package gotelemetry
 
 type Board struct {
-	credentials Credentials `json:"-"`
-	Id          string      `json:"id,omitempty"`
-	Name        string      `json:"name,omitempty"`
-	Theme       string      `json:"theme,omitempty"`
-	DisplayName bool        `json:"display_board_name,omitempty"`
-	AspectRatio string      `json:"aspect_ratio,omitempty"`
+	credentials      Credentials `json:"-"`
+	Id               string      `json:"id,omitempty"`
+	Name             string      `json:"name,omitempty"`
+	Theme            string      `json:"theme,omitempty"`
+	DisplayName      bool        `json:"display_board_name,omitempty"`
+	AspectRatio      string      `json:"aspect_ratio,omitempty"`
+	Size             []int64     `json:"size"`
+	FontFamily       string      `json:"font_family",omitempty`
+	FontSize         string      `json:"font_size",omitempty`
+	WidgetBackground string      `json:"widget_background",omitempty`
+	WidgetMargins    int64       `json:"widget_margins",omitempty`
+	WidgetPadding    int64       `json:"widget_padding",omitempty`
 }
 
 func NewBoard(credentials Credentials, name, theme string, displayName bool, aspectRatio string) (*Board, error) {
