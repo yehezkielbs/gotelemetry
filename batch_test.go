@@ -9,7 +9,7 @@ import (
 func Example_batch() {
 	// Note that the test API token cannot be used for
 	// batch submission.
-	c, err := NewCredentials("myapitoken")
+	c, err := NewCredentials(getTestKey())
 
 	So(err, ShouldBeNil)
 
@@ -34,7 +34,7 @@ func Example_batch() {
 func ExampleBatch() {
 	// Note that the test API token cannot be used for
 	// batch submission.
-	c, err := NewCredentials("myapitoken")
+	c, err := NewCredentials(getTestKey())
 
 	So(err, ShouldBeNil)
 
@@ -123,11 +123,7 @@ func TestBatchSubmissions(t *testing.T) {
 			err = b.Publish(c)
 
 			So(err, ShouldNotBeNil)
-
-			e, ok := err.(*Error)
-
-			So(ok, ShouldBeTrue)
-			So(e.StatusCode, ShouldEqual, 401)
+			So(err.(*Error).StatusCode, ShouldEqual, 401)
 		})
 	})
 

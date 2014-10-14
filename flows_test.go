@@ -66,7 +66,7 @@ func TestFlows(t *testing.T) {
 
 			err = f.Publish(c)
 
-			So(err.Error(), ShouldContainSubstring, "200")
+			So(err, ShouldBeNil)
 		})
 
 		Convey("Should properly report errors", func() {

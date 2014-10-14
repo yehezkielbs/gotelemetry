@@ -1,24 +1,29 @@
 package gotelemetry
 
 import (
+	"crypto/rand"
+	"fmt"
 	. "github.com/smartystreets/goconvey/convey"
 	"testing"
 )
 
 func TestBoards(t *testing.T) {
+	credentials, _ := NewCredentials(getTestKey())
 
-	board := Board{Name: "junitTestBoard", Theme: "dark", Display_board_name: true, Aspect_ratio: "HDTV"}
-	credentials, _ := NewCredentials(api_key)
+	p := make([]byte, 10)
+	rand.Read(p)
+
+	name := fmt.Sprintf("board-%x", p)
 
 	Convey("Boards", t, func() {
-		Convey("Should return status 201 when a Board is created", func() {
-			results := board.CreateBoard(credentials)
-			So(results.Error(), ShouldContainSubstring, "201")
-		})
+		Convey("Should properly create and delete boards", func() {
+			b, err := NewBoard(credentials, name, "dark", true, "HDTV")
 
-		Convey("Should return status 204 when a Board is deleted", func() {
-			results := board.DeleteBoard(credentials)
-			So(results.Error(), ShouldContainSubstring, "204")
+			So(err, ShouldBeNil)
+			So(b, ShouldNotBeNil)
+
+			err = b.DeleteBoard(credentials)
+			So(err, ShouldBeNil)
 		})
 	})
 

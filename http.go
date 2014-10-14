@@ -71,5 +71,9 @@ func sendJSONRequest(request *http.Request) (interface{}, error) {
 		return nil, err
 	}
 
-	return body, NewErrorWithData(r.StatusCode, r.Status, body)
+	if r.StatusCode > 399 {
+		return nil, NewErrorWithData(r.StatusCode, r.Status, body)
+	}
+
+	return body, nil
 }
