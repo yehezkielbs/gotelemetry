@@ -16,11 +16,17 @@ func TestBoards(t *testing.T) {
 	name := fmt.Sprintf("board-%x", p)
 
 	Convey("Boards", t, func() {
-		Convey("Should properly create and delete boards", func() {
+		Convey("Should properly create, retrieve, and delete boards", func() {
 			b, err := NewBoard(credentials, name, "dark", true, "HDTV")
 
 			So(err, ShouldBeNil)
 			So(b, ShouldNotBeNil)
+
+			b1, err := GetBoard(credentials, b.Id)
+
+			So(err, ShouldBeNil)
+			So(b1, ShouldNotBeNil)
+			So(b1.Id, ShouldEqual, b.Id)
 
 			err = b.DeleteBoard(credentials)
 			So(err, ShouldBeNil)
