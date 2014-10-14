@@ -28,7 +28,7 @@ func TestBoards(t *testing.T) {
 			So(b1, ShouldNotBeNil)
 			So(b1.Id, ShouldEqual, b.Id)
 
-			err = b.DeleteBoard(credentials)
+			err = b.Delete()
 			So(err, ShouldBeNil)
 		})
 	})

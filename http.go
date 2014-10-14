@@ -52,28 +52,32 @@ func readJSONResponseBody(r *http.Response, target interface{}) error {
 	return nil
 }
 
-func sendJSONRequest(request *http.Request) (interface{}, error) {
+func sendJSONRequestInterface(request *http.Request, target interface{}) error {
 	r, err := http.DefaultClient.Do(request)
 
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	if r.Body != nil {
 		defer r.Body.Close()
 	}
 
+	if r.StatusCode > 399 {
+		var errorBody interface{}
+
+		readJSONResponseBody(r, &errorBody)
+
+		return NewErrorWithData(r.StatusCode, r.Status, errorBody)
+	}
+
+	return readJSONResponseBody(r, target)
+}
+
+func sendJSONRequest(request *http.Request) (interface{}, error) {
 	var body interface{}
 
-	err = readJSONResponseBody(r, &body)
+	err := sendJSONRequestInterface(request, &body)
 
-	if err != nil {
-		return nil, err
-	}
-
-	if r.StatusCode > 399 {
-		return nil, NewErrorWithData(r.StatusCode, r.Status, body)
-	}
-
-	return body, nil
+	return body, err
 }

@@ -13,29 +13,32 @@ func TestWidgets(t *testing.T) {
 	Convey("Widgets", t, func() {
 		board := &Board{Id: board_id}
 
-		widget := Widget{"log", board.Id, 1, 1, 10, 10, 0, "default"}
 		credentials, _ := NewCredentials(getTestKey())
 
-		Convey("Should successfully create a Widget", func() {
-			widget, err := NewWidget(credentials, board, "value", 1, 1, 1, 1, 0, "default")
-			So(widget, ShouldNotBeNil)
+		Convey("Should successfully create, retrieve, and delete a Widget", func() {
+			w, err := NewWidget(credentials, board, "value", 1, 1, 1, 1, 0, "default")
+
 			So(err, ShouldBeNil)
-		})
+			So(w, ShouldNotBeNil)
+			So(w.Id, ShouldNotBeEmpty)
+			So(len(w.FlowIds), ShouldBeGreaterThan, 0)
+			So(w.BoardId, ShouldNotBeEmpty)
 
-		Convey("Should return an invalid board_id error when the board does not exist", func() {
-			testWidget := widget
-			testWidget.BoardId = "I am not a valid board"
-			err := testWidget.Save(credentials)
-			So(err, ShouldNotBeNil)
-			So(err.Error(), ShouldContainSubstring, "400")
-		})
+			w2, err := GetWidget(credentials, w.Id)
 
-		Convey("Should return a 400 when a invalid variant is passed", func() {
-			testWidget := widget
-			testWidget.Variant = "I am not a valid variant"
-			err := testWidget.Save(credentials)
+			So(err, ShouldBeNil)
+			So(w2, ShouldNotBeNil)
+			So(w2.Id, ShouldEqual, w.Id)
+
+			err = w2.Delete()
+
+			So(err, ShouldBeNil)
+
+			w3, err := GetWidget(credentials, w.Id)
+
+			So(w3, ShouldBeNil)
 			So(err, ShouldNotBeNil)
-			So(err.Error(), ShouldContainSubstring, "400")
+			So(err.(*Error).StatusCode, ShouldEqual, 404)
 		})
 	})
 

@@ -1,26 +1,24 @@
 package gotelemetry
 
-import (
-	"net/http"
-)
-
 type Board struct {
-	Id          string `json:"id,omitempty"`
-	Name        string `json:"name,omitempty"`
-	Theme       string `json:"theme,omitempty"`
-	DisplayName bool   `json:"display_board_name,omitempty"`
-	AspectRatio string `json:"aspect_ratio,omitempty"`
+	credentials Credentials `json:"-"`
+	Id          string      `json:"id,omitempty"`
+	Name        string      `json:"name,omitempty"`
+	Theme       string      `json:"theme,omitempty"`
+	DisplayName bool        `json:"display_board_name,omitempty"`
+	AspectRatio string      `json:"aspect_ratio,omitempty"`
 }
 
 func NewBoard(credentials Credentials, name, theme string, displayName bool, aspectRatio string) (*Board, error) {
 	result := &Board{
+		credentials: credentials,
 		Name:        name,
 		Theme:       theme,
 		DisplayName: displayName,
 		AspectRatio: aspectRatio,
 	}
 
-	result.Save(credentials)
+	result.Save()
 
 	return result, nil
 }
@@ -34,38 +32,31 @@ func GetBoard(credentials Credentials, id string) (*Board, error) {
 
 	b := &Board{}
 
-	res, err := http.DefaultClient.Do(request)
+	err = sendJSONRequestInterface(request, b)
 
 	if err != nil {
 		return nil, err
 	}
 
-	err = readJSONResponseBody(res, b)
+	b.credentials = credentials
 
 	return b, err
 }
 
-func (b *Board) Save(credentials Credentials) error {
-	request, err := buildRequest("POST", credentials, "/boards", b)
+func (b *Board) Save() error {
+	request, err := buildRequest("POST", b.credentials, "/boards", b)
 
 	if err != nil {
 		return err
 	}
 
-	var responseBody interface{}
-	responseBody, err = sendJSONRequest(request)
+	err = sendJSONRequestInterface(request, b)
 
-	if err != nil {
-		return err
-	}
-
-	b.Id = responseBody.(map[string]interface{})["id"].(string) //FIXME: Find a better way to copy all attrbs from the return to the b Board
-
-	return nil
+	return err
 }
 
-func (b *Board) DeleteBoard(credentials Credentials) error {
-	request, err := buildRequest("DELETE", credentials, "/boards/"+b.Id, nil)
+func (b *Board) Delete() error {
+	request, err := buildRequest("DELETE", b.credentials, "/boards/"+b.Id, nil)
 
 	if err != nil {
 		return err
