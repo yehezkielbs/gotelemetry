@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"path"
 )
@@ -64,11 +65,9 @@ func sendJSONRequestInterface(request *http.Request, target interface{}) error {
 	}
 
 	if r.StatusCode > 399 {
-		var errorBody interface{}
+		v, _ := ioutil.ReadAll(r.Body)
 
-		readJSONResponseBody(r, &errorBody)
-
-		return NewErrorWithData(r.StatusCode, r.Status, errorBody)
+		return NewErrorWithData(r.StatusCode, r.Status, v)
 	}
 
 	return readJSONResponseBody(r, target)

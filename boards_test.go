@@ -21,6 +21,8 @@ func TestBoards(t *testing.T) {
 
 			So(err, ShouldBeNil)
 			So(b, ShouldNotBeNil)
+			So(b.Id, ShouldNotBeNil)
+			So(b.ChannelIds, ShouldNotBeEmpty)
 
 			b1, err := GetBoard(credentials, b.Id)
 

@@ -26,12 +26,15 @@ import (
 // a pointer to the appropriate underlying data by calling one of the *Data() methods
 // of the struct.
 type Flow struct {
-	Tag             string `json:"tag"`
-	Data            interface{}
-	Variant         string `json:"variant"`
-	Source_provider string `json:"source_provider,omitempty"`
-	Filter          string `json:"filter,omitempty"`
-	Params          string `json:"params,omitempty"`
+	credentials    Credentials
+	Id             string `json:"id"`
+	EmbedId        string `json:"embed_id"`
+	Tag            string `json:"tag"`
+	Data           interface{}
+	Variant        string `json:"variant"`
+	SourceProvider string `json:"source_provider,omitempty"`
+	Filter         string `json:"filter,omitempty"`
+	Params         string `json:"params,omitempty"`
 }
 
 // NewFlow() creates a new flow. Note that the `data` parameter *must* be a pointer to
@@ -54,6 +57,43 @@ func NewFlow(tag string, data interface{}) *Flow {
 	}
 
 	return &Flow{Tag: tag, Data: data}
+}
+
+func NewFlowWithLayout(credentials Credentials, tag string, variant, sourceProvider, filter, params string) (*Flow, error) {
+	result := &Flow{
+		credentials:    credentials,
+		Tag:            tag,
+		Variant:        variant,
+		SourceProvider: sourceProvider,
+		Filter:         filter,
+		Params:         params,
+	}
+
+	err := result.Save()
+
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
+}
+
+func GetFlowLayout(credentials Credentials, id string) (*Flow, error) {
+	req, err := buildRequest("GET", credentials, "/flows/"+id+"/layout", nil)
+
+	if err != nil {
+		return nil, err
+	}
+
+	result := &Flow{credentials: credentials}
+
+	err = sendJSONRequestInterface(req, &result)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
 }
 
 // Publish() sends a flow to the Telemetry API servers. On output, the function return
@@ -99,8 +139,20 @@ func (f *Flow) Read(credentials Credentials) error {
 	return err
 }
 
-func (f *Flow) CreateFlow(credentials Credentials) error {
-	request, err := buildRequest("POST", credentials, "/flows", f)
+func (f *Flow) Save() error {
+	request, err := buildRequest("POST", f.credentials, "/flows", f)
+
+	if err != nil {
+		return err
+	}
+
+	err = sendJSONRequestInterface(request, &f)
+
+	return err
+}
+
+func (f *Flow) Delete() error {
+	request, err := buildRequest("DELETE", f.credentials, "/flows/"+f.Id, nil)
 
 	if err != nil {
 		return err
