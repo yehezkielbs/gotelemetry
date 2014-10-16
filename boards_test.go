@@ -43,7 +43,7 @@ func TestBoards(t *testing.T) {
 			So(err, ShouldNotBeNil)
 			So(getBoard, ShouldBeNil)
 
-			err = newBoardgit.Delete()
+			err = newBoard.Delete()
 			So(err, ShouldNotBeNil)
 
 		})
