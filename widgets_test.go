@@ -53,7 +53,7 @@ func TestWidgets(t *testing.T) {
 			err = newWidget.Delete()
 			So(err, ShouldNotBeNil)
 
-		})git 
+		})
 	})
 
 }
