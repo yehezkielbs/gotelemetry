@@ -30,14 +30,13 @@ func TestChannels(t *testing.T) {
 
 			b1.Delete()
 
-			b3, err := ImportBoard(credentials, "test", exported)
+			b3, err := ImportBoard(credentials, name+"-clone", "test", exported)
 
 			So(err, ShouldBeNil)
 			So(b3, ShouldNotBeNil)
 
 			b4, err := GetBoard(credentials, b3.Id)
 
-			So(b3.Name, ShouldEqual, "test"+b.Name)
 			So(len(b3.Widgets), ShouldEqual, len(b4.Widgets))
 
 			b3.Delete()
@@ -53,8 +52,8 @@ func TestChannels(t *testing.T) {
 
 			exportedBoard, _ := getBoard.Export()
 
-			importedBoard, err := ImportBoard(credentials, "fail_import", exportedBoard)
-			importedBoardWithSameName, err := ImportBoard(credentials, "fail_import", exportedBoard)
+			importedBoard, err := ImportBoard(credentials, "Fail Import", "fail_import", exportedBoard)
+			importedBoardWithSameName, err := ImportBoard(credentials, "Fail Import", "fail_import", exportedBoard)
 
 			So(importedBoardWithSameName, ShouldBeNil)
 			So(err, ShouldNotBeNil)

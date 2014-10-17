@@ -28,8 +28,19 @@ type ExportedBoard struct {
 	Widgets          []*ExportedWidget `json:"widgets"`
 }
 
-func ImportBoard(credentials Credentials, prefix string, board *ExportedBoard) (*Board, error) {
-	result := &Board{credentials: credentials}
+func ImportBoard(credentials Credentials, name string, prefix string, board *ExportedBoard) (*Board, error) {
+	// First, make sure the board doesn't already exist
+
+	result, err := GetBoardByName(credentials, name)
+
+	if err == nil && result != nil {
+		//TODO: Make sure that the board retrieved from the API matches
+		// the makeup of the board templte we're trying to import.
+
+		return result
+	}
+
+	result = &Board{credentials: credentials}
 
 	encoded, err := json.Marshal(board)
 
@@ -45,7 +56,7 @@ func ImportBoard(credentials Credentials, prefix string, board *ExportedBoard) (
 
 	result.Widgets = []*Widget{}
 
-	result.Name = prefix + result.Name
+	result.Name = name
 
 	err = result.Save()
 

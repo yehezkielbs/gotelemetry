@@ -1,5 +1,9 @@
 package gotelemetry
 
+import (
+	"net/url"
+)
+
 type Board struct {
 	credentials      Credentials `json:"-"`
 	Id               string      `json:"id,omitempty"`
@@ -34,6 +38,26 @@ func NewBoard(credentials Credentials, name, theme string, displayName bool, asp
 // Returns a board from Telemetry API by its ID
 func GetBoard(credentials Credentials, id string) (*Board, error) {
 	request, err := buildRequest("GET", credentials, "/boards/"+id, nil)
+
+	if err != nil {
+		return nil, err
+	}
+
+	b := &Board{}
+
+	err = sendJSONRequestInterface(request, b)
+
+	if err != nil {
+		return nil, err
+	}
+
+	b.credentials = credentials
+
+	return b, err
+}
+
+func GetBoardByName(credentials Credentials, name string) (*Board, error) {
+	request, err := buildRequest("GET", credentials, "/boards?name="+url.QueryEscape(name), nil)
 
 	if err != nil {
 		return nil, err
