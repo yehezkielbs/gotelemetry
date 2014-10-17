@@ -40,6 +40,20 @@ func TestWidgets(t *testing.T) {
 			So(err, ShouldNotBeNil)
 			So(err.(*Error).StatusCode, ShouldEqual, 404)
 		})
+
+		Convey("Should fail to retrieve and delete a invalid widget", func() {
+			newWidget, err := NewWidget(credentials, board, "value", 1, 1, 1, 1, 0, "default")
+
+			newWidget.Id += "123"
+
+			getWidget, err := GetWidget(credentials, newWidget.Id)
+			So(err, ShouldNotBeNil)
+			So(getWidget, ShouldBeNil)
+
+			err = newWidget.Delete()
+			So(err, ShouldNotBeNil)
+
+		})
 	})
 
 }

@@ -14,6 +14,7 @@ type Widget struct {
 	Background  string      `json:"background"`
 }
 
+// Creates a new Widget on Telemetry and binds it to a specific board. Returns the created Widget struct if there are no errros.
 func NewWidget(credentials Credentials, board *Board, variant string, column, row, width, height, boardIndex int, background string) (*Widget, error) {
 	w := &Widget{
 		credentials: credentials,
@@ -36,6 +37,7 @@ func NewWidget(credentials Credentials, board *Board, variant string, column, ro
 	return w, nil
 }
 
+// Get a Widget from Telemetry API by ID
 func GetWidget(credentials Credentials, id string) (*Widget, error) {
 	request, err := buildRequest("GET", credentials, "/widgets/"+id, nil)
 
@@ -56,6 +58,7 @@ func GetWidget(credentials Credentials, id string) (*Widget, error) {
 	return w, nil
 }
 
+// Delete a Widget from Telemetry
 func (w *Widget) Delete() error {
 	request, err := buildRequest("DELETE", w.credentials, "/widgets/"+w.Id, nil)
 

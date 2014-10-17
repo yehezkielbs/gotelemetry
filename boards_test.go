@@ -33,6 +33,20 @@ func TestBoards(t *testing.T) {
 			err = b.Delete()
 			So(err, ShouldBeNil)
 		})
+
+		Convey("Should fail to retrieve and delete a invalid board", func() {
+			newBoard, err := NewBoard(credentials, name, "dark", true, "HDTV")
+
+			newBoard.Id += "123"
+
+			getBoard, err := GetBoard(credentials, newBoard.Id)
+			So(err, ShouldNotBeNil)
+			So(getBoard, ShouldBeNil)
+
+			err = newBoard.Delete()
+			So(err, ShouldNotBeNil)
+
+		})
 	})
 
 }

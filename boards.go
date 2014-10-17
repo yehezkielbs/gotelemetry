@@ -16,6 +16,7 @@ type Board struct {
 	ChannelIds       []string    `json:"channel_ids",omitempty"`
 }
 
+// Creates a new board in Telemetry by informing the basic parameters and return a new *Board instance
 func NewBoard(credentials Credentials, name, theme string, displayName bool, aspectRatio string) (*Board, error) {
 	result := &Board{
 		credentials: credentials,
@@ -30,6 +31,7 @@ func NewBoard(credentials Credentials, name, theme string, displayName bool, asp
 	return result, nil
 }
 
+// Returns a board from Telemetry API by its ID
 func GetBoard(credentials Credentials, id string) (*Board, error) {
 	request, err := buildRequest("GET", credentials, "/boards/"+id, nil)
 
@@ -62,6 +64,7 @@ func (b *Board) Save() error {
 	return err
 }
 
+// Deletes a board from Telemetry
 func (b *Board) Delete() error {
 	request, err := buildRequest("DELETE", b.credentials, "/boards/"+b.Id, nil)
 
