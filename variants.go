@@ -70,6 +70,7 @@ type Gauge struct {
 	ValueColor  string   `json:"value_color,omitempty"`
 	ValueType   string   `json:"value_type,omitempty"`
 	GaugeColor  string   `json:"gauge_color,omitempty"`
+	Min         float64  `json:"min,omitempty"`
 	Max         float64  `json:"max,omitempty"`
 	Range       int      `json:"range,omitempty"`
 	Value2      float64  `json:"value_2,omitempty"`
