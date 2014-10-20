@@ -1,9 +1,5 @@
 package gotelemetry
 
-import (
-	"net/url"
-)
-
 type Board struct {
 	credentials      Credentials `json:"-"`
 	Id               string      `json:"id,omitempty"`
@@ -57,23 +53,24 @@ func GetBoard(credentials Credentials, id string) (*Board, error) {
 }
 
 func GetBoardByName(credentials Credentials, name string) (*Board, error) {
-	request, err := buildRequest("GET", credentials, "/boards?name="+url.QueryEscape(name), nil)
+	request, err := buildRequest("GET", credentials, "/boards", nil, map[string]string{"name": name})
 
 	if err != nil {
 		return nil, err
 	}
 
-	b := &Board{}
+	b := []*Board{}
 
-	err = sendJSONRequestInterface(request, b)
+	err = sendJSONRequestInterface(request, &b)
 
 	if err != nil {
 		return nil, err
 	}
 
-	b.credentials = credentials
+	result := b[0]
+	result.credentials = credentials
 
-	return b, err
+	return result, err
 }
 
 func (b *Board) Save() error {

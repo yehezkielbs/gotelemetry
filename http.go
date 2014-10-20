@@ -6,18 +6,23 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"path"
 )
 
 func buildRequest(method string, credentials Credentials, fragment string, body interface{}, parameters ...map[string]string) (*http.Request, error) {
-	url := *credentials.ServerURL
+	URL := *credentials.ServerURL
 
-	url.Path = path.Join(url.Path, fragment)
+	URL.Path = path.Join(URL.Path, fragment)
 
 	if len(parameters) > 0 {
+		p := url.Values{}
+
 		for index, value := range parameters[0] {
-			url.Query().Add(index, value)
+			p.Add(index, value)
 		}
+
+		URL.RawQuery = p.Encode()
 	}
 
 	var b []byte
@@ -33,7 +38,7 @@ func buildRequest(method string, credentials Credentials, fragment string, body 
 		}
 	}
 
-	r, err := http.NewRequest(method, url.String(), bytes.NewReader(b))
+	r, err := http.NewRequest(method, URL.String(), bytes.NewReader(b))
 
 	if err != nil {
 		return nil, err
