@@ -34,6 +34,12 @@ func ImportBoard(credentials Credentials, name string, prefix string, board *Exp
 	result, err := GetBoardByName(credentials, name)
 
 	if err == nil && result != nil {
+		result, err = GetBoard(credentials, result.Id)
+
+		if err != nil {
+			return nil, err
+		}
+
 		//TODO: Make sure that the board retrieved from the API matches
 		// the makeup of the board template we're trying to import.
 
