@@ -10,6 +10,7 @@
 package gotelemetry
 
 import (
+	"encoding/json"
 	"net/http"
 	"reflect"
 )
@@ -117,10 +118,20 @@ func (f *Flow) Publish(credentials Credentials) error {
 }
 
 func (f *Flow) Read(credentials Credentials) error {
+	var searchTag string
+
+	if f.EmbedId != "" {
+		searchTag = f.EmbedId
+	} else if f.Id != "" {
+		searchTag = f.Id
+	} else {
+		searchTag = f.Tag
+	}
+
 	req, err := buildRequest(
 		"GET",
 		credentials,
-		"/flows/"+f.Tag+"/data",
+		"/flows/"+searchTag+"/data",
 		nil,
 	)
 
@@ -134,7 +145,83 @@ func (f *Flow) Read(credentials Credentials) error {
 		return err
 	}
 
+	needsConversion := false
+
+	if f.Data == nil {
+		f.Data = &map[string]interface{}{}
+		needsConversion = true
+	}
+
 	err = readJSONResponseBody(res, f.Data)
+
+	if needsConversion {
+		encoded, err := json.Marshal(f.Data)
+
+		if err != nil {
+			return err
+		}
+
+		switch f.Variant {
+		case "barchart":
+			f.Data = &Barchart{}
+		case "bulletchart":
+			f.Data = &Bulletchart{}
+		case "countdown":
+			f.Data = &Countdown{}
+		case "custom":
+			f.Data = &Custom{}
+		case "funnelchart":
+			f.Data = &Funnelchart{}
+		case "gauge":
+			f.Data = &Gauge{}
+		case "graph":
+			f.Data = &Graph{}
+		case "grid":
+			f.Data = &Grid{}
+		case "histogram":
+			f.Data = &Histogram{}
+		case "icon":
+			f.Data = &Icon{}
+		case "image":
+			f.Data = &Image{}
+		case "log":
+			f.Data = &Log{}
+		case "map":
+			f.Data = &Map{}
+		case "multigauge":
+			f.Data = &Multigauge{}
+		case "multivalue":
+			f.Data = &Multivalue{}
+		case "piechart":
+			f.Data = &Piechart{}
+		case "scatterplot":
+			f.Data = &Scatterplot{}
+		case "servers":
+			f.Data = &Servers{}
+		case "status":
+			f.Data = &Status{}
+		case "table":
+			f.Data = &Table{}
+		case "text":
+			f.Data = &Text{}
+		case "tickertape":
+			f.Data = &Tickertape{}
+		case "timeline":
+			f.Data = &Timeline{}
+		case "timeseries":
+			f.Data = &Timeseries{}
+		case "upstatus":
+			f.Data = &Upstatus{}
+		case "value":
+			f.Data = &Value{}
+		case "waterfall":
+			f.Data = &Waterfall{}
+		default:
+			return NewError(500, "Unknown variant "+f.Variant)
+		}
+
+		json.Unmarshal(encoded, &f.Data)
+	}
 
 	return err
 }

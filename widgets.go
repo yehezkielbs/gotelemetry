@@ -6,6 +6,7 @@ type Widget struct {
 	Variant     string      `json:"variant"`
 	BoardId     string      `json:"board_id"`
 	FlowIds     []string    `json:"flow_ids,omitempty"`
+	FlowId      string      `json:"flow_id,omitempty"`
 	Column      int         `json:"column"`
 	Row         int         `json:"row"`
 	Width       int         `json:"width"`

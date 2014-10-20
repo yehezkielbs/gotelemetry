@@ -30,7 +30,7 @@ func TestChannels(t *testing.T) {
 
 			b1.Delete()
 
-			b3, err := ImportBoard(credentials, name+"-clone", "test", exported)
+			b3, err := ImportBoard(credentials, name+"-clone", "testt", exported)
 
 			So(err, ShouldBeNil)
 			So(b3, ShouldNotBeNil)
@@ -42,7 +42,7 @@ func TestChannels(t *testing.T) {
 			b3.Delete()
 		})
 
-		Convey("Should not import a board with a name that already exists", func() {
+		Convey("Should return, rather than reimport, a board with a name that already exists", func() {
 
 			newBoard, _ := NewBoard(credentials, name, "dark", true, "HDTV")
 			_, _ = NewWidget(credentials, newBoard, "value", 1, 2, 3, 4, 0, "normal")
@@ -55,8 +55,9 @@ func TestChannels(t *testing.T) {
 			importedBoard, err := ImportBoard(credentials, "Fail Import", "fail_import", exportedBoard)
 			importedBoardWithSameName, err := ImportBoard(credentials, "Fail Import", "fail_import", exportedBoard)
 
-			So(importedBoardWithSameName, ShouldBeNil)
-			So(err, ShouldNotBeNil)
+			So(importedBoardWithSameName, ShouldNotBeNil)
+			So(err, ShouldBeNil)
+			So(importedBoardWithSameName.Id, ShouldEqual, importedBoard.Id)
 
 			// Clean up
 			importedBoard.Delete()

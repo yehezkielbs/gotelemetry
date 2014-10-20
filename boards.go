@@ -100,3 +100,33 @@ func (b *Board) Delete() error {
 	_, err = sendJSONRequest(request)
 	return err
 }
+
+func (b *Board) MapWidgetsToFlows() (map[string]*Flow, error) {
+	var err error
+
+	if b.Widgets == nil {
+		if b, err = GetBoard(b.credentials, b.Id); err != nil {
+			return nil, err
+		}
+	}
+
+	result := map[string]*Flow{}
+
+	for _, widget := range b.Widgets {
+		f, err := GetFlowLayout(b.credentials, widget.FlowIds[0])
+
+		if err != nil {
+			return nil, err
+		}
+
+		err = f.Read(b.credentials)
+
+		if err != nil {
+			return nil, err
+		}
+
+		result[f.Tag] = f
+	}
+
+	return result, nil
+}

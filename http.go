@@ -51,8 +51,19 @@ func buildRequest(method string, credentials Credentials, fragment string, body 
 }
 
 func readJSONResponseBody(r *http.Response, target interface{}) error {
-	if err := json.NewDecoder(r.Body).Decode(target); err != nil && err != io.EOF {
-		return NewError(400, "Invalid JSON response.")
+	source, err := ioutil.ReadAll(r.Body)
+
+	if err != nil && err != io.EOF {
+		return err
+	}
+
+	if len(source) == 0 {
+		// Nothing to read
+		return nil
+	}
+
+	if err := json.Unmarshal(source, target); err != nil {
+		return NewError(400, "Invalid JSON response: "+string(source)+" (JSON decode error: "+err.Error()+")")
 	}
 
 	return nil
