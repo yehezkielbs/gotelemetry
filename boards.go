@@ -67,6 +67,10 @@ func GetBoardByName(credentials Credentials, name string) (*Board, error) {
 		return nil, err
 	}
 
+	if len(b) < 1 {
+		return nil, NewError(404, "Board not found")
+	}
+
 	result := b[0]
 	result.credentials = credentials
 
