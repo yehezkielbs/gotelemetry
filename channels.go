@@ -35,9 +35,9 @@ func ImportBoard(credentials Credentials, name string, prefix string, board *Exp
 
 	if err == nil && result != nil {
 		//TODO: Make sure that the board retrieved from the API matches
-		// the makeup of the board templte we're trying to import.
+		// the makeup of the board template we're trying to import.
 
-		return result
+		return result, nil
 	}
 
 	result = &Board{credentials: credentials}
