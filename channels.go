@@ -40,13 +40,15 @@ func ImportBoard(credentials Credentials, name string, prefix string, board *Exp
 			return nil, err
 		}
 
+		result.Prefix = prefix
+
 		//TODO: Make sure that the board retrieved from the API matches
 		// the makeup of the board template we're trying to import.
 
 		return result, nil
 	}
 
-	result = &Board{credentials: credentials}
+	result = &Board{credentials: credentials, Prefix: prefix}
 
 	encoded, err := json.Marshal(board)
 

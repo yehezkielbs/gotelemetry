@@ -1,7 +1,12 @@
 package gotelemetry
 
+import (
+	"strings"
+)
+
 type Board struct {
 	credentials      Credentials `json:"-"`
+	Prefix           string      `json:"-"`
 	Id               string      `json:"id,omitempty"`
 	Name             string      `json:"name,omitempty"`
 	Theme            string      `json:"theme,omitempty"`
@@ -125,7 +130,7 @@ func (b *Board) MapWidgetsToFlows() (map[string]*Flow, error) {
 			return nil, err
 		}
 
-		result[f.Tag] = f
+		result[strings.TrimPrefix(f.Tag, b.Prefix)] = f
 	}
 
 	return result, nil
