@@ -164,6 +164,8 @@ func (f *Flow) Read(credentials Credentials) error {
 		switch f.Variant {
 		case "barchart":
 			f.Data = &Barchart{}
+		case "box":
+			f.Data = &Box{}
 		case "bulletchart":
 			f.Data = &Bulletchart{}
 		case "countdown":

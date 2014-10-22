@@ -1,9 +1,9 @@
 package gotelemetry
 
 type BarchartBar struct {
-	Color string `json:"color,omitempty"`
-	Label string `json:"label,omitempty"`
-	Value string `json:"value,omitempty"`
+	Color string  `json:"color,omitempty"`
+	Label string  `json:"label,omitempty"`
+	Value float64 `json:"value,omitempty"`
 }
 
 type Barchart struct {
@@ -12,6 +12,9 @@ type Barchart struct {
 	Title     string        `json:"title,omitempty"`
 	Priority  int           `json:"priority,omitempty"`
 	Bars      []BarchartBar `json:"bars"`
+}
+
+type Box struct {
 }
 
 type BulletchartChart struct {
@@ -307,7 +310,7 @@ type Status struct {
 }
 
 type TableCell struct {
-	Value     string    `json:"value,omitempty"`
+	Value     float64   `json:"value,omitempty"`
 	Color     string    `json:"color,omitempty"`
 	Alignment string    `json:"alignment,omitempty"`
 	Icon      string    `json:"icon,omitempty"`
@@ -388,21 +391,21 @@ type Upstatus struct {
 }
 
 type Value struct {
-	ExpiresAt  int64     `json:"expires_at,omitempty"`
-	Opacity    *float64  `json:"opacity,omitempty"`
-	Title      string    `json:"title,omitempty"`
-	Priority   int       `json:"priority,omitempty"`
-	Color      string    `json:"color,omitempty"`
-	Delta      float64   `json:"delta,omitempty"`
-	DeltaType  string    `json:"delta_type,omitempty"`
-	Label      string    `json:"label,omitempty"`
-	Sparkline  []float64 `json:"sparkline,omitempty"`
-	Value      float64   `json:"value,omitempty"`
-	ValueType  string    `json:"value_type,omitempty"`
-	Abbreviate bool      `json:"abbreviate,omitempty"`
-	Rounding   int       `json:"rounding,omitempty"`
-	Icon       string    `json:"icon,omitempty"`
-	LabelColor string    `json:"label_color,omitempty"`
+	ExpiresAt  int64       `json:"expires_at,omitempty"`
+	Opacity    *float64    `json:"opacity,omitempty"`
+	Title      string      `json:"title,omitempty"`
+	Priority   int         `json:"priority,omitempty"`
+	Color      string      `json:"color,omitempty"`
+	Delta      float64     `json:"delta,omitempty"`
+	DeltaType  string      `json:"delta_type,omitempty"`
+	Label      string      `json:"label,omitempty"`
+	Sparkline  []float64   `json:"sparkline,omitempty"`
+	Value      interface{} `json:"value,omitempty"`
+	ValueType  string      `json:"value_type,omitempty"`
+	Abbreviate bool        `json:"abbreviate,omitempty"`
+	Rounding   int         `json:"rounding,omitempty"`
+	Icon       string      `json:"icon,omitempty"`
+	LabelColor string      `json:"label_color,omitempty"`
 }
 
 type WaterfallData struct {

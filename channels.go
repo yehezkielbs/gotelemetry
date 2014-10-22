@@ -4,15 +4,20 @@ import (
 	"encoding/json"
 )
 
+type ExportedFlow struct {
+	Tag  string      `json:"tag"`
+	Data interface{} `json:"data"`
+}
+
 type ExportedWidget struct {
-	Variant    string `json:"variant"`
-	Tag        string `json:"tag"`
-	Column     int    `json:"column"`
-	Row        int    `json:"row"`
-	Width      int    `json:"width"`
-	Height     int    `json:"height"`
-	BoardIndex int    `json:"in_board_index"`
-	Background string `json:"background"`
+	Flow       *ExportedFlow `json:"flow"`
+	Variant    string        `json:"variant"`
+	Column     int           `json:"column"`
+	Row        int           `json:"row"`
+	Width      int           `json:"width"`
+	Height     int           `json:"height"`
+	BoardIndex int           `json:"in_board_index"`
+	Background string        `json:"background"`
 }
 
 type ExportedBoard struct {
@@ -75,7 +80,7 @@ func ImportBoard(credentials Credentials, name string, prefix string, board *Exp
 	for _, exportedWidget := range board.Widgets {
 		flow, err := NewFlowWithLayout(
 			credentials,
-			prefix+exportedWidget.Tag,
+			prefix+exportedWidget.Flow.Tag,
 			exportedWidget.Variant,
 			"",
 			"",
@@ -83,6 +88,15 @@ func ImportBoard(credentials Credentials, name string, prefix string, board *Exp
 		)
 
 		if err != nil {
+			result.Delete()
+			return nil, err
+		}
+
+		flow.Data = exportedWidget.Flow.Data
+		err = flow.Publish(credentials)
+
+		if err != nil {
+			flow.Delete()
 			result.Delete()
 			return nil, err
 		}
@@ -143,7 +157,19 @@ func (b *Board) Export() (*ExportedBoard, error) {
 			return nil, err
 		}
 
-		result.Widgets[index].Tag = flow.Tag
+		err = flow.Read(b.credentials)
+
+		if err != nil {
+			return nil, err
+		}
+
+		encoded, err := json.Marshal(flow)
+
+		if err != nil {
+			return nil, err
+		}
+
+		err = json.Unmarshal(encoded, &result.Widgets[index].Flow)
 	}
 
 	return result, nil
