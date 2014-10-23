@@ -1,9 +1,9 @@
 package gotelemetry
 
 type BarchartBar struct {
-	Color string  `json:"color,omitempty"`
-	Label string  `json:"label,omitempty"`
-	Value float64 `json:"value,omitempty"`
+	Color string      `json:"color,omitempty"`
+	Label string      `json:"label,omitempty"`
+	Value interface{} `json:"value"`
 }
 
 type Barchart struct {
