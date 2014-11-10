@@ -121,6 +121,7 @@ func ImportBoard(credentials Credentials, name string, prefix string, board *Exp
 
 		widget.BoardId = result.Id
 		widget.FlowId = flow.Id
+
 		err = widget.Save()
 
 		if err != nil {

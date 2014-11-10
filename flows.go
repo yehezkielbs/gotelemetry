@@ -28,14 +28,14 @@ import (
 // of the struct.
 type Flow struct {
 	credentials    Credentials
-	Id             string `json:"id"`
-	EmbedId        string `json:"embed_id"`
-	Tag            string `json:"tag"`
-	Data           interface{}
-	Variant        string `json:"variant"`
-	SourceProvider string `json:"source_provider,omitempty"`
-	Filter         string `json:"filter,omitempty"`
-	Params         string `json:"params,omitempty"`
+	Id             string      `json:"id,omitempty"`
+	EmbedId        string      `json:"embed_id,omitempty"`
+	Tag            string      `json:"tag"`
+	Data           interface{} `json:"data"`
+	Variant        string      `json:"variant"`
+	SourceProvider string      `json:"source_provider,omitempty"`
+	Filter         string      `json:"filter,omitempty"`
+	Params         string      `json:"params,omitempty"`
 }
 
 // NewFlow() creates a new flow. Note that the `data` parameter *must* be a pointer to
