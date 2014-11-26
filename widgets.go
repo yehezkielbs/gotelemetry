@@ -7,10 +7,10 @@ type Widget struct {
 	BoardId     string      `json:"board_id"`
 	FlowIds     []string    `json:"flow_ids,omitempty"`
 	FlowId      string      `json:"flow_id,omitempty"`
-	Column      int         `json:"column"`
-	Row         int         `json:"row"`
-	Width       int         `json:"width"`
-	Height      int         `json:"height"`
+	Column      float64     `json:"column"`
+	Row         float64     `json:"row"`
+	Width       float64     `json:"width"`
+	Height      float64     `json:"height"`
 	BoardIndex  int         `json:"in_board_index"`
 	Background  string      `json:"background"`
 }
@@ -21,10 +21,10 @@ func NewWidget(credentials Credentials, board *Board, variant string, column, ro
 		credentials: credentials,
 		Variant:     variant,
 		BoardId:     board.Id,
-		Column:      column,
-		Row:         row,
-		Width:       width,
-		Height:      height,
+		Column:      float64(column),
+		Row:         float64(row),
+		Width:       float64(width),
+		Height:      float64(height),
 		BoardIndex:  boardIndex,
 		Background:  background,
 	}

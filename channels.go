@@ -12,10 +12,10 @@ type ExportedFlow struct {
 type ExportedWidget struct {
 	Flow       *ExportedFlow `json:"flow"`
 	Variant    string        `json:"variant"`
-	Column     int           `json:"column"`
-	Row        int           `json:"row"`
-	Width      int           `json:"width"`
-	Height     int           `json:"height"`
+	Column     float64       `json:"column"`
+	Row        float64       `json:"row"`
+	Width      float64       `json:"width"`
+	Height     float64       `json:"height"`
 	BoardIndex int           `json:"in_board_index"`
 	Background string        `json:"background"`
 }

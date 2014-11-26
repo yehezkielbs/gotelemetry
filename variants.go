@@ -237,7 +237,7 @@ type Multigauge struct {
 	Opacity    *float64          `json:"opacity,omitempty"`
 	Title      string            `json:"title,omitempty"`
 	Priority   int               `json:"priority,omitempty"`
-	Layout     string            `json:"layout"`
+	Layout     string            `json:"layout,omitempty"`
 	Gauges     []MultigaugeGauge `json:"gauges"`
 }
 
