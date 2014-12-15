@@ -108,19 +108,21 @@ type Graph struct {
 }
 
 type GridData struct {
-	Fill      int    `json:"fill"`
-	Label     string `json:"label"`
-	FillColor string `json:"fill_color,omitempty"`
-	BGColor   string `json:"bg_color,omitempty"`
-	Color     string `json:"color,omitempty"`
+	Fill       int    `json:"fill"`
+	Label      string `json:"label"`
+	FillColor  string `json:"fill_color,omitempty"`
+	BGColor    string `json:"bg_color,omitempty"` // deprecated, use BarBgColor
+	BarBgColor string `json:"bar_bg_color,omitempty"`
+	Color      string `json:"color,omitempty"` // deprecated, use LabelColor
+	LabelColor string `json:"label_color,omitempty"`
 }
 
 type Grid struct {
-	ExpiresAt int64        `json:"expires_at,omitempty"`
-	Opacity   *float64     `json:"opacity,omitempty"`
-	Title     string       `json:"title,omitempty"`
-	Priority  int          `json:"priority,omitempty"`
-	Data      [][]GridData `json:"data"`
+	ExpiresAt int64      `json:"expires_at,omitempty"`
+	Opacity   *float64   `json:"opacity,omitempty"`
+	Title     string     `json:"title,omitempty"`
+	Priority  int        `json:"priority,omitempty"`
+	Data      []GridData `json:"data"`
 }
 
 type Histogram struct {
