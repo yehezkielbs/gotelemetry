@@ -294,6 +294,7 @@ type Servers struct {
 	Priority  int      `json:"priority,omitempty"`
 	Orange    float64  `json:"name,omitempty"`
 	Red       float64  `json:"name,omitempty"`
+	Servers   []Server `json:"servers"`
 }
 
 type StatusItem struct {
@@ -390,6 +391,19 @@ type Upstatus struct {
 	Uptime    float64  `json:"uptime,omitempty"`
 }
 
+type Video struct {
+	ExpiresAt int64    `json:"expires_at,omitempty"`
+	Opacity   *float64 `json:"opacity,omitempty"`
+	Title     string   `json:"title,omitempty"`
+	Priority  int      `json:"priority,omitempty"`
+	Mode      string   `json:"mode,omitempty"`
+	MP4       string   `json:"mp4,omitempty"`
+	Muted     bool     `json:"muted,omitempty"`
+	OGG       string   `json:"ogg,omitempty"`
+	Poster    string   `json:"poster,omitempty"`
+	WebM      string   `json:"webm,omitempty"`
+}
+
 type Value struct {
 	ExpiresAt  int64       `json:"expires_at,omitempty"`
 	Opacity    *float64    `json:"opacity,omitempty"`
@@ -409,8 +423,8 @@ type Value struct {
 }
 
 type WaterfallData struct {
-	Serial int      `json:"serial"`
-	Values []string `json:"values"`
+	Serial int           `json:"serial"`
+	Values []interface{} `json:"values"`
 }
 
 type Waterfall struct {

@@ -78,27 +78,32 @@ func ImportBoard(credentials Credentials, name string, prefix string, board *Exp
 	}
 
 	for _, exportedWidget := range board.Widgets {
-		flow, err := NewFlowWithLayout(
-			credentials,
-			prefix+exportedWidget.Flow.Tag,
-			exportedWidget.Variant,
-			"",
-			"",
-			"",
-		)
+		var flow *Flow = nil
+		var err error
 
-		if err != nil {
-			result.Delete()
-			return nil, err
-		}
+		if exportedWidget.Flow != nil {
+			flow, err = NewFlowWithLayout(
+				credentials,
+				prefix+exportedWidget.Flow.Tag,
+				exportedWidget.Variant,
+				"",
+				"",
+				"",
+			)
 
-		flow.Data = exportedWidget.Flow.Data
-		err = flow.Publish(credentials)
+			if err != nil {
+				result.Delete()
+				return nil, err
+			}
 
-		if err != nil {
-			flow.Delete()
-			result.Delete()
-			return nil, err
+			flow.Data = exportedWidget.Flow.Data
+			err = flow.Publish(credentials)
+
+			if err != nil {
+				flow.Delete()
+				result.Delete()
+				return nil, err
+			}
 		}
 
 		widget := &Widget{credentials: credentials}
@@ -106,7 +111,10 @@ func ImportBoard(credentials Credentials, name string, prefix string, board *Exp
 		encoded, err = json.Marshal(exportedWidget)
 
 		if err != nil {
-			flow.Delete()
+			if flow != nil {
+				flow.Delete()
+			}
+
 			result.Delete()
 			return nil, err
 		}
@@ -114,18 +122,27 @@ func ImportBoard(credentials Credentials, name string, prefix string, board *Exp
 		err = json.Unmarshal(encoded, &widget)
 
 		if err != nil {
-			flow.Delete()
+			if flow != nil {
+				flow.Delete()
+			}
+
 			result.Delete()
 			return nil, err
 		}
 
 		widget.BoardId = result.Id
-		widget.FlowId = flow.Id
+
+		if flow != nil {
+			widget.FlowId = flow.Id
+		}
 
 		err = widget.Save()
 
 		if err != nil {
-			flow.Delete()
+			if flow != nil {
+				flow.Delete()
+			}
+
 			result.Delete()
 			return nil, err
 		}
@@ -152,25 +169,27 @@ func (b *Board) Export() (*ExportedBoard, error) {
 	}
 
 	for index, widget := range b.Widgets {
-		flow, err := GetFlowLayout(b.credentials, widget.FlowIds[0])
+		if len(widget.FlowIds) > 0 {
+			flow, err := GetFlowLayout(b.credentials, widget.FlowIds[0])
 
-		if err != nil {
-			return nil, err
+			if err != nil {
+				return nil, err
+			}
+
+			err = flow.Read(b.credentials)
+
+			if err != nil {
+				return nil, err
+			}
+
+			encoded, err := json.Marshal(flow)
+
+			if err != nil {
+				return nil, err
+			}
+
+			err = json.Unmarshal(encoded, &result.Widgets[index].Flow)
 		}
-
-		err = flow.Read(b.credentials)
-
-		if err != nil {
-			return nil, err
-		}
-
-		encoded, err := json.Marshal(flow)
-
-		if err != nil {
-			return nil, err
-		}
-
-		err = json.Unmarshal(encoded, &result.Widgets[index].Flow)
 	}
 
 	return result, nil

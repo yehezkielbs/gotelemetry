@@ -79,6 +79,24 @@ func NewFlowWithLayout(credentials Credentials, tag string, variant, sourceProvi
 	return result, nil
 }
 
+func GetFlowLayoutWithTag(credentials Credentials, tag string) (*Flow, error) {
+	req, err := buildRequest("GET", credentials, "/flows/"+tag, nil)
+
+	if err != nil {
+		return nil, err
+	}
+
+	result := &Flow{credentials: credentials}
+
+	err = sendJSONRequestInterface(req, &result)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
+}
+
 func GetFlowLayout(credentials Credentials, id string) (*Flow, error) {
 	req, err := buildRequest("GET", credentials, "/flows/"+id+"/layout", nil)
 
@@ -115,6 +133,93 @@ func (f *Flow) Publish(credentials Credentials) error {
 	_, err = sendJSONRequest(r)
 
 	return err
+}
+
+func (f *Flow) Update(data interface{}) error {
+	encoded, err := json.Marshal(data)
+
+	if err != nil {
+		return err
+	}
+
+	json.Unmarshal(encoded, &f.Data)
+
+	return nil
+}
+
+func (f *Flow) Populate(variant string, data interface{}) error {
+	encoded, err := json.Marshal(data)
+
+	if err != nil {
+		return err
+	}
+
+	switch variant {
+	case "barchart":
+		f.Data = &Barchart{}
+	case "box":
+		f.Data = &Box{}
+	case "bulletchart":
+		f.Data = &Bulletchart{}
+	case "countdown":
+		f.Data = &Countdown{}
+	case "custom":
+		f.Data = &Custom{}
+	case "funnelchart":
+		f.Data = &Funnelchart{}
+	case "gauge":
+		f.Data = &Gauge{}
+	case "graph":
+		f.Data = &Graph{}
+	case "grid":
+		f.Data = &Grid{}
+	case "histogram":
+		f.Data = &Histogram{}
+	case "icon":
+		f.Data = &Icon{}
+	case "image":
+		f.Data = &Image{}
+	case "log":
+		f.Data = &Log{}
+	case "map":
+		f.Data = &Map{}
+	case "multigauge":
+		f.Data = &Multigauge{}
+	case "multivalue":
+		f.Data = &Multivalue{}
+	case "piechart":
+		f.Data = &Piechart{}
+	case "scatterplot":
+		f.Data = &Scatterplot{}
+	case "servers":
+		f.Data = &Servers{}
+	case "status":
+		f.Data = &Status{}
+	case "table":
+		f.Data = &Table{}
+	case "text":
+		f.Data = &Text{}
+	case "tickertape":
+		f.Data = &Tickertape{}
+	case "timeline":
+		f.Data = &Timeline{}
+	case "timeseries":
+		f.Data = &Timeseries{}
+	case "upstatus":
+		f.Data = &Upstatus{}
+	case "value":
+		f.Data = &Value{}
+	case "video":
+		f.Data = &Video{}
+	case "waterfall":
+		f.Data = &Waterfall{}
+	default:
+		return NewError(500, "Unknown variant "+variant)
+	}
+
+	json.Unmarshal(encoded, &f.Data)
+
+	return nil
 }
 
 func (f *Flow) Read(credentials Credentials) error {
@@ -154,75 +259,14 @@ func (f *Flow) Read(credentials Credentials) error {
 
 	err = readJSONResponseBody(res, f.Data)
 
-	if needsConversion {
-		encoded, err := json.Marshal(f.Data)
+	if err != nil {
+		return err
+	}
 
-		if err != nil {
+	if needsConversion {
+		if err := f.Populate(f.Variant, f.Data); err != nil {
 			return err
 		}
-
-		switch f.Variant {
-		case "barchart":
-			f.Data = &Barchart{}
-		case "box":
-			f.Data = &Box{}
-		case "bulletchart":
-			f.Data = &Bulletchart{}
-		case "countdown":
-			f.Data = &Countdown{}
-		case "custom":
-			f.Data = &Custom{}
-		case "funnelchart":
-			f.Data = &Funnelchart{}
-		case "gauge":
-			f.Data = &Gauge{}
-		case "graph":
-			f.Data = &Graph{}
-		case "grid":
-			f.Data = &Grid{}
-		case "histogram":
-			f.Data = &Histogram{}
-		case "icon":
-			f.Data = &Icon{}
-		case "image":
-			f.Data = &Image{}
-		case "log":
-			f.Data = &Log{}
-		case "map":
-			f.Data = &Map{}
-		case "multigauge":
-			f.Data = &Multigauge{}
-		case "multivalue":
-			f.Data = &Multivalue{}
-		case "piechart":
-			f.Data = &Piechart{}
-		case "scatterplot":
-			f.Data = &Scatterplot{}
-		case "servers":
-			f.Data = &Servers{}
-		case "status":
-			f.Data = &Status{}
-		case "table":
-			f.Data = &Table{}
-		case "text":
-			f.Data = &Text{}
-		case "tickertape":
-			f.Data = &Tickertape{}
-		case "timeline":
-			f.Data = &Timeline{}
-		case "timeseries":
-			f.Data = &Timeseries{}
-		case "upstatus":
-			f.Data = &Upstatus{}
-		case "value":
-			f.Data = &Value{}
-		case "waterfall":
-			f.Data = &Waterfall{}
-		default:
-			return NewError(500, "Unknown variant "+f.Variant)
-		}
-
-		json.Unmarshal(encoded, &f.Data)
 	}
 
 	return err
@@ -230,6 +274,18 @@ func (f *Flow) Read(credentials Credentials) error {
 
 func (f *Flow) Save() error {
 	request, err := buildRequest("POST", f.credentials, "/flows", f)
+
+	if err != nil {
+		return err
+	}
+
+	err = sendJSONRequestInterface(request, &f)
+
+	return err
+}
+
+func (f *Flow) PostUpdate() error {
+	request, err := buildRequest("PUT", f.credentials, "/flows/"+f.EmbedId+"/data", f.Data)
 
 	if err != nil {
 		return err
