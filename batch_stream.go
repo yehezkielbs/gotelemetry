@@ -80,6 +80,8 @@ func (b *BatchStream) sendUpdates() {
 		batch.SetFlow(flow)
 	}
 
+	b.updates = []*Flow{}
+
 	err := batch.Publish(b.credentials)
 
 	if err != nil && b.errorChannel != nil {

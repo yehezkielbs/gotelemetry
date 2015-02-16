@@ -11,6 +11,9 @@ type Barchart struct {
 	Opacity   *float64      `json:"opacity,omitempty"`
 	Title     string        `json:"title,omitempty"`
 	Priority  int           `json:"priority,omitempty"`
+	Min       interface{}   `json:"min,omitempty"`
+	Max       interface{}   `json:"max,omitempty"`
+	Sort      interface{}   `json:"sort,omitempty"`
 	Bars      []BarchartBar `json:"bars"`
 }
 
