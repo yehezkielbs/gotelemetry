@@ -11,7 +11,6 @@ package gotelemetry
 
 import (
 	"encoding/json"
-	"net/http"
 	"reflect"
 )
 
@@ -244,7 +243,7 @@ func (f *Flow) Read(credentials Credentials) error {
 		return err
 	}
 
-	res, err := http.DefaultClient.Do(req)
+	res, err := sendRawRequest(req)
 
 	if err != nil {
 		return err
@@ -257,7 +256,7 @@ func (f *Flow) Read(credentials Credentials) error {
 		needsConversion = true
 	}
 
-	err = readJSONResponseBody(res, f.Data)
+	err = readJSONResponseBody(res, f.Data, f.credentials.DebugChannel)
 
 	if err != nil {
 		return err

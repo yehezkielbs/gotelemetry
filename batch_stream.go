@@ -4,12 +4,18 @@ import (
 	"time"
 )
 
+type batchStreamSubmission struct {
+	submissionType BatchType
+	tag            string
+	data           interface{}
+}
+
 type BatchStream struct {
-	C              chan *Flow
+	C              chan batchStreamSubmission
 	errorChannel   *chan error
 	credentials    Credentials
 	control        chan bool
-	updates        []*Flow
+	updates        map[string]batchStreamSubmission
 	updateInterval time.Duration
 }
 
@@ -19,11 +25,11 @@ func NewBatchStream(credentials Credentials, submissionInterval time.Duration, e
 	}
 
 	result := &BatchStream{
-		C:              make(chan *Flow, 10),
+		C:              make(chan batchStreamSubmission, 10),
 		errorChannel:   errorChannel,
 		credentials:    credentials,
 		control:        make(chan bool, 0),
-		updates:        []*Flow{},
+		updates:        map[string]batchStreamSubmission{},
 		updateInterval: submissionInterval,
 	}
 
@@ -33,7 +39,19 @@ func NewBatchStream(credentials Credentials, submissionInterval time.Duration, e
 }
 
 func (b *BatchStream) Send(f *Flow) {
-	b.C <- f
+	b.C <- batchStreamSubmission{
+		submissionType: BatchTypePOST,
+		tag:            f.Tag,
+		data:           f.Data,
+	}
+}
+
+func (b *BatchStream) SendData(tag string, data interface{}, submissionType BatchType) {
+	b.C <- batchStreamSubmission{
+		submissionType: submissionType,
+		tag:            tag,
+		data:           data,
+	}
 }
 
 func (b *BatchStream) Stop() {
@@ -45,13 +63,9 @@ func (b *BatchStream) handle() {
 
 	for {
 		select {
-		case flow := <-b.C:
+		case update := <-b.C:
 
-			if flow == nil {
-				continue
-			}
-
-			b.updates = append(b.updates, flow)
+			b.updates[update.tag] = update
 
 		case <-b.control:
 
@@ -74,17 +88,23 @@ func (b *BatchStream) sendUpdates() {
 		return
 	}
 
-	batch := Batch{}
+	batches := map[BatchType]Batch{}
 
-	for _, flow := range b.updates {
-		batch.SetFlow(flow)
+	for _, update := range b.updates {
+		if _, ok := batches[update.submissionType]; !ok {
+			batches[update.submissionType] = Batch{}
+		}
+
+		batches[update.submissionType].SetData(update.tag, update.data)
 	}
 
-	b.updates = []*Flow{}
+	for submissionType, batch := range batches {
+		err := batch.Publish(b.credentials, submissionType)
 
-	err := batch.Publish(b.credentials)
-
-	if err != nil && b.errorChannel != nil {
-		*b.errorChannel <- err
+		if err != nil && b.errorChannel != nil {
+			*b.errorChannel <- err
+		}
 	}
+
+	b.updates = map[string]batchStreamSubmission{}
 }
