@@ -58,6 +58,11 @@ func (b *BatchStream) Stop() {
 	b.control <- true
 }
 
+func (b *BatchStream) Flush() {
+	b.sendUpdates()
+	b.Stop()
+}
+
 func (b *BatchStream) handle() {
 	t := time.After(b.updateInterval)
 
