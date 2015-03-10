@@ -18,7 +18,7 @@ func NewChannel(tag string) *Channel {
 
 func (c *Channel) SendNotification(credentials Credentials, notification Notification) error {
 	if credentials.DebugChannel != nil {
-		*credentials.DebugChannel <- NewDebugError("Sending notification %#v to channel %s", notification, c.Tag)
+		credentials.DebugChannel <- NewDebugError("Sending notification %#v to channel %s", notification, c.Tag)
 	}
 
 	req, err := buildRequest(

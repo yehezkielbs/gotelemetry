@@ -50,7 +50,7 @@ func (b Batch) Publish(credentials Credentials, submissionType BatchType) error 
 		if credentials.DebugChannel != nil {
 			payload, _ := json.Marshal(submission)
 
-			*credentials.DebugChannel <- NewDebugError(
+			credentials.DebugChannel <- NewDebugError(
 				fmt.Sprintf(
 					"About to post flow %s with data %s",
 					key,
@@ -92,11 +92,11 @@ func (b Batch) Publish(credentials Credentials, submissionType BatchType) error 
 	err = sendJSONRequestInterface(r, &response)
 
 	for _, errString := range response.Errors {
-		*credentials.DebugChannel <- NewError(400, "API Error: "+errString)
+		credentials.DebugChannel <- NewError(400, "API Error: "+errString)
 	}
 
 	for _, skipped := range response.Skipped {
-		*credentials.DebugChannel <- NewError(400, "API Error: The flow `"+skipped+"` was not updated.")
+		credentials.DebugChannel <- NewError(400, "API Error: The flow `"+skipped+"` was not updated.")
 	}
 
 	return err

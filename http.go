@@ -34,7 +34,7 @@ func buildRequestWithHeaders(method string, credentials Credentials, fragment st
 	}
 
 	if debugChannel != nil {
-		*debugChannel <- NewDebugError(fmt.Sprintf("Building request %s %s", method, URL.String()))
+		debugChannel <- NewDebugError(fmt.Sprintf("Building request %s %s", method, URL.String()))
 	}
 
 	var b []byte
@@ -50,7 +50,7 @@ func buildRequestWithHeaders(method string, credentials Credentials, fragment st
 		}
 
 		if debugChannel != nil {
-			*debugChannel <- NewDebugError(fmt.Sprintf("Request payload: %s", string(b)))
+			debugChannel <- NewDebugError(fmt.Sprintf("Request payload: %s", string(b)))
 		}
 	}
 
@@ -68,7 +68,7 @@ func buildRequestWithHeaders(method string, credentials Credentials, fragment st
 	}
 
 	if debugChannel != nil {
-		*debugChannel <- NewDebugError(fmt.Sprintf("API Key: %s", credentials.APIKey))
+		debugChannel <- NewDebugError(fmt.Sprintf("API Key: %s", credentials.APIKey))
 	}
 
 	return &TelemetryRequest{r, credentials}, nil
@@ -78,7 +78,7 @@ func buildRequest(method string, credentials Credentials, fragment string, body 
 	return buildRequestWithHeaders(method, credentials, fragment, map[string]string{}, body, parameters...)
 }
 
-func readJSONResponseBody(r *http.Response, target interface{}, debugChannel *chan error) error {
+func readJSONResponseBody(r *http.Response, target interface{}, debugChannel chan error) error {
 	source, err := ioutil.ReadAll(r.Body)
 
 	if err != nil && err != io.EOF {
@@ -86,7 +86,7 @@ func readJSONResponseBody(r *http.Response, target interface{}, debugChannel *ch
 	}
 
 	if debugChannel != nil {
-		*debugChannel <- NewDebugError(fmt.Sprintf("Response payload: %s", string(source)))
+		debugChannel <- NewDebugError(fmt.Sprintf("Response payload: %s", string(source)))
 	}
 
 	if len(source) == 0 {
@@ -117,10 +117,10 @@ func sendJSONRequestInterface(request *TelemetryRequest, target interface{}) err
 	}
 
 	if debugChannel != nil {
-		*debugChannel <- NewDebugError(fmt.Sprintf("Response status code: %d", r.StatusCode))
+		debugChannel <- NewDebugError(fmt.Sprintf("Response status code: %d", r.StatusCode))
 
 		for key, value := range r.Header {
-			*debugChannel <- NewDebugError(fmt.Sprintf("Response header %s: %s", key, value))
+			debugChannel <- NewDebugError(fmt.Sprintf("Response header %s: %s", key, value))
 		}
 	}
 
@@ -132,7 +132,7 @@ func sendJSONRequestInterface(request *TelemetryRequest, target interface{}) err
 		v, _ := ioutil.ReadAll(r.Body)
 
 		if len(v) > 0 && debugChannel != nil {
-			*debugChannel <- NewDebugError(fmt.Sprintf("Response payload: %s", string(v)))
+			debugChannel <- NewDebugError(fmt.Sprintf("Response payload: %s", string(v)))
 		}
 
 		return NewErrorWithData(r.StatusCode, r.Status, v)
