@@ -5,6 +5,12 @@ import (
 	"fmt"
 )
 
+type BatchResponse struct {
+	Errors  []string `json:"errors"`
+	Skipped []string `json:"skipped"`
+	Updated []string `json:"updated"`
+}
+
 type BatchType int
 
 const (
@@ -81,7 +87,17 @@ func (b Batch) Publish(credentials Credentials, submissionType BatchType) error 
 		return err
 	}
 
-	_, err = sendJSONRequest(r)
+	response := BatchResponse{}
+
+	err = sendJSONRequestInterface(r, &response)
+
+	for _, errString := range response.Errors {
+		*credentials.DebugChannel <- NewError(400, "API Error: "+errString)
+	}
+
+	for _, skipped := range response.Skipped {
+		*credentials.DebugChannel <- NewError(400, "API Error: The flow `"+skipped+"` was not updated.")
+	}
 
 	return err
 }
