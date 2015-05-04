@@ -114,6 +114,18 @@ func GetFlowLayout(credentials Credentials, id string) (*Flow, error) {
 	return result, nil
 }
 
+func SetFlowError(credentials Credentials, tag string, body interface{}) error {
+	req, err := buildRequest("POST", credentials, "/flows/"+tag+"/error", body)
+
+	if err != nil {
+		return err
+	}
+
+	_, err = sendJSONRequest(req)
+
+	return err
+}
+
 // Publish() sends a flow to the Telemetry API servers. On output, the function return
 // nil if the submission was successful, an instance of gotelemetry.Error if a REST
 // error occurred, or a errors.Error instance otherwise.

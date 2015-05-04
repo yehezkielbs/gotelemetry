@@ -6,6 +6,18 @@ type Notification struct {
 	Icon     string `json:"icon,omitempty"`
 	Duration int    `json:"duration,omitempty"`
 	SoundURL string `json:"sound_url,omitempty"`
+	FlowTag  string `json:"flow_tag,omitempty"`
+}
+
+func NewNotification(title, message, icon string, duration int, soundUrl, flowTag string) Notification {
+	return Notification{
+		Title:    title,
+		Message:  message,
+		Icon:     icon,
+		Duration: duration,
+		SoundURL: soundUrl,
+		FlowTag:  flowTag,
+	}
 }
 
 type Channel struct {
