@@ -1,6 +1,8 @@
 package gotelemetry
 
-import "errors"
+import (
+	"net/http"
+)
 
 type Notification struct {
 	Title    string `json:"title,omitempty"`
@@ -52,7 +54,7 @@ func (c *Channel) SendNotification(credentials Credentials, notification Notific
 
 func SendFlowChannelNotification(credentials Credentials, flowTag string, notification Notification) error {
 	if len(flowTag) == 0 {
-		return errors.New("flowTag is required")
+		return NewError(http.StatusBadRequest, "flowTag is required")
 	}
 
 	if credentials.DebugChannel != nil {
