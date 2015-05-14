@@ -1,5 +1,9 @@
 package gotelemetry
 
+import (
+	"net/http"
+)
+
 type Notification struct {
 	Title    string `json:"title,omitempty"`
 	Message  string `json:"message,omitempty"`
@@ -9,14 +13,13 @@ type Notification struct {
 	FlowTag  string `json:"flow_tag,omitempty"`
 }
 
-func NewNotification(title, message, icon string, duration int, soundUrl, flowTag string) Notification {
+func NewNotification(title, message, icon string, duration int, soundUrl string) Notification {
 	return Notification{
 		Title:    title,
 		Message:  message,
 		Icon:     icon,
 		Duration: duration,
 		SoundURL: soundUrl,
-		FlowTag:  flowTag,
 	}
 }
 
@@ -40,6 +43,30 @@ func (c *Channel) SendNotification(credentials Credentials, notification Notific
 		notification,
 	)
 
+	if err != nil {
+		return err
+	}
+
+	_, err = sendJSONRequest(req)
+
+	return err
+}
+
+func SendFlowChannelNotification(credentials Credentials, flowTag string, notification Notification) error {
+	if len(flowTag) == 0 {
+		return NewError(http.StatusBadRequest, "flowTag is required")
+	}
+
+	if credentials.DebugChannel != nil {
+		credentials.DebugChannel <- NewDebugError("Sending notification %#v to channels of the flow %s", notification, flowTag)
+	}
+
+	req, err := buildRequest(
+		"POST",
+		credentials,
+		"flows/"+flowTag+"/notifications",
+		notification,
+	)
 	if err != nil {
 		return err
 	}
