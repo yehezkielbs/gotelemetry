@@ -118,6 +118,10 @@ func (b *Board) MapWidgetsToFlows() (map[string]*Flow, error) {
 	result := map[string]*Flow{}
 
 	for _, widget := range b.Widgets {
+		if len(widget.FlowIds) == 0 {
+			continue
+		}
+
 		f, err := GetFlowLayout(b.credentials, widget.FlowIds[0])
 
 		if err != nil {
