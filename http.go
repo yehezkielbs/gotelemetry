@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"net/url"
 	"path"
@@ -62,8 +61,6 @@ func buildRequestWithHeaders(method string, credentials Credentials, fragment st
 	if err != nil {
 		return nil, err
 	}
-
-	log.Printf("%#v", UserAgentString)
 
 	r.Header.Set("user-agent", UserAgentString)
 	r.Header.Set("content-type", "application/json")
