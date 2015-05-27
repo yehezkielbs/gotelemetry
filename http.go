@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"net/url"
 	"path"
@@ -15,6 +16,8 @@ type TelemetryRequest struct {
 	*http.Request
 	credentials Credentials
 }
+
+var UserAgentString = "Gotelemetry"
 
 func buildRequestWithHeaders(method string, credentials Credentials, fragment string, headers map[string]string, body interface{}, parameters ...map[string]string) (*TelemetryRequest, error) {
 	debugChannel := credentials.DebugChannel
@@ -60,6 +63,9 @@ func buildRequestWithHeaders(method string, credentials Credentials, fragment st
 		return nil, err
 	}
 
+	log.Printf("%#v", UserAgentString)
+
+	r.Header.Set("user-agent", UserAgentString)
 	r.Header.Set("content-type", "application/json")
 	r.SetBasicAuth(credentials.APIKey, "")
 
