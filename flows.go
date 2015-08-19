@@ -133,7 +133,7 @@ func (f *Flow) Publish(credentials Credentials) error {
 	r, err := buildRequest(
 		"PUT",
 		credentials,
-		"/flows/"+f.Tag+"/data",
+		"/flows/"+f.Tag+"/metrics",
 		f.Data,
 	)
 
@@ -247,7 +247,7 @@ func (f *Flow) Read(credentials Credentials) error {
 	req, err := buildRequest(
 		"GET",
 		credentials,
-		"/flows/"+searchTag+"/data",
+		"/flows/"+searchTag+"/metrics",
 		nil,
 	)
 
@@ -296,7 +296,7 @@ func (f *Flow) Save() error {
 }
 
 func (f *Flow) PostUpdate() error {
-	request, err := buildRequest("PUT", f.credentials, "/flows/"+f.EmbedId+"/data", f.Data)
+	request, err := buildRequest("PUT", f.credentials, "/flows/"+f.EmbedId+"/metrics", f.Data)
 
 	if err != nil {
 		return err

@@ -76,7 +76,7 @@ func (b Batch) Publish(credentials Credentials, submissionType BatchType) error 
 	r, err := buildRequestWithHeaders(
 		method,
 		credentials,
-		"/data",
+		"/metrics",
 		headers,
 		map[string]interface{}{
 			"data": data,
